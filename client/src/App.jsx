@@ -22,7 +22,9 @@ import Recurring from './pages/Recurring';
 import Loans from './pages/Loans';
 import Notifications from './pages/Notifications';
 import Support from './pages/Support';
-import Settings from './pages/Settings'; // <-- Naya
+import Settings from './pages/Settings';
+import ReferEarn from './pages/ReferEarn';
+import Budget from './pages/Budget'; // <-- Naya
 
 const Protected = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
@@ -57,7 +59,9 @@ const App = () => {
           <Route path="/loans" element={<Protected><Loans /></Protected>} />
           <Route path="/notifications" element={<Protected><Notifications /></Protected>} />
           <Route path="/support" element={<Protected><Support /></Protected>} />
-          <Route path="/settings" element={<Protected><Settings /></Protected>} /> {/* <-- Naya */}
+          <Route path="/settings" element={<Protected><Settings /></Protected>} />
+          <Route path="/refer" element={<Protected><ReferEarn /></Protected>} />
+          <Route path="/budget" element={<Protected><Budget /></Protected>} /> {/* <-- Naya */}
         </Routes>
       </BrowserRouter>
     </AuthProvider>
