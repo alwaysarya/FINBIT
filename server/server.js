@@ -15,7 +15,12 @@ app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/account', require('./routes/accountRoutes'));
 app.use('/api/transaction', require('./routes/transactionRoutes'));
 app.use('/api/fd', require('./routes/fdRoutes'));
-app.use('/api/beneficiary', require('./routes/beneficiaryRoutes')); // <-- Naya
+app.use('/api/beneficiary', require('./routes/beneficiaryRoutes'));
+app.use('/api/goal', require('./routes/goalRoutes'));
+app.use('/api/card', require('./routes/cardRoutes'));
+app.use('/api/rewards', require('./routes/rewardRoutes'));
+app.use('/api/request', require('./routes/requestRoutes'));
+app.use('/api/scheduled', require('./routes/scheduledRoutes')); // <-- Naya
 
 app.get('/', (req, res) => res.json({ message: 'FINBIT API is running 🚀' }));
 app.use(errorHandler);

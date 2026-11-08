@@ -29,8 +29,12 @@ const Navbar = () => {
         {user && (
           <>
             <Link to="/dashboard">Dashboard</Link>
+            <Link to="/card">My Card</Link>
             <Link to="/transfer">Transfer</Link>
-            <Link to="/beneficiaries">Beneficiaries</Link> {/* <-- Naya */}
+            <Link to="/scheduled">📅 Scheduled</Link> {/* <-- NAYA LINK */}
+            <Link to="/requests">Requests</Link>
+            <Link to="/rewards">🎁 Rewards</Link>
+            <Link to="/goals">Goals</Link>
             <Link to="/fd">FD</Link>
             <Link to="/bills">Bills</Link>
             <Link to="/transactions">History</Link>

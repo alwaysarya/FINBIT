@@ -497,3 +497,43 @@ body.light .filter-bar select {
 body.light .notif-dropdown { background: white; border-color: #cbd5e1; }
 body.light .notif-item { background: #f1f5f9; }
 body.light .notif-item strong { color: #0f172a; }
+
+/* Virtual Card Styling */
+.virtual-card {
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 1.6;
+  background: linear-gradient(135deg, #6366f1 0%, #1e1b4b 100%);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: white;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  transition: all 0.3s;
+  margin-bottom: 2rem;
+}
+.virtual-card.frozen {
+  filter: grayscale(100%) blur(1px);
+  opacity: 0.7;
+}
+.card-top { display: flex; justify-content: space-between; align-items: center; }
+.card-chip { font-size: 1.5rem; }
+.card-type { font-weight: 600; font-size: 1.1rem; font-style: italic; }
+.card-number { font-size: 1.5rem; letter-spacing: 2px; font-family: monospace; text-align: center; }
+.card-bottom { display: flex; justify-content: space-between; gap: 1rem; }
+.card-label { font-size: 0.65rem; opacity: 0.7; text-transform: uppercase; margin-bottom: 4px; }
+.card-value { font-size: 0.9rem; font-weight: 600; letter-spacing: 1px; }
+
+.card-controls button {
+  padding: 0.8rem 2rem;
+  border-radius: 8px;
+  border: none;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: opacity 0.2s;
+}
+.card-controls button:hover { opacity: 0.85; }
