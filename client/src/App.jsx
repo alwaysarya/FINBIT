@@ -16,7 +16,10 @@ import Goals from './pages/Goals';
 import MyCard from './pages/MyCard';
 import Rewards from './pages/Rewards';
 import Requests from './pages/Requests';
-import ScheduledTransfers from './pages/ScheduledTransfers'; // <-- Naya
+import ScheduledTransfers from './pages/ScheduledTransfers';
+import Ledger from './pages/Ledger';
+import Recurring from './pages/Recurring';
+import Loans from './pages/Loans'; // <-- Naya
 
 const Protected = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
@@ -45,7 +48,10 @@ const App = () => {
           <Route path="/card" element={<Protected><MyCard /></Protected>} />
           <Route path="/rewards" element={<Protected><Rewards /></Protected>} />
           <Route path="/requests" element={<Protected><Requests /></Protected>} />
-          <Route path="/scheduled" element={<Protected><ScheduledTransfers /></Protected>} /> {/* <-- Naya */}
+          <Route path="/scheduled" element={<Protected><ScheduledTransfers /></Protected>} />
+          <Route path="/ledger" element={<Protected><Ledger /></Protected>} />
+          <Route path="/recurring" element={<Protected><Recurring /></Protected>} />
+          <Route path="/loans" element={<Protected><Loans /></Protected>} /> {/* <-- Naya */}
         </Routes>
       </BrowserRouter>
     </AuthProvider>

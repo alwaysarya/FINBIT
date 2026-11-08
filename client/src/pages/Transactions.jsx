@@ -14,13 +14,7 @@ const Transactions = () => {
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
-    api.get('/account/transactions')
-      .then((res) => {
-        setTxns(res.data);
-        setFilteredTxns(res.data);
-      })
-      .catch((err) => setToast({ message: 'Failed to load history', type: 'error' }))
-      .finally(() => setLoading(false));
+    api.get('/account/transactions').then((res) => { setTxns(res.data); setFilteredTxns(res.data); }).catch(() => setToast({ message: 'Failed to load', type: 'error' })).finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
@@ -32,10 +26,7 @@ const Transactions = () => {
       });
     }
     if (searchTerm) {
-      result = result.filter(t => 
-        (t.description && t.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        t.amount.toString().includes(searchTerm)
-      );
+      result = result.filter(t => (t.description && t.description.toLowerCase().includes(searchTerm.toLowerCase())) || t.amount.toString().includes(searchTerm));
     }
     setFilteredTxns(result);
   }, [searchTerm, filterType, txns, user]);
@@ -46,30 +37,17 @@ const Transactions = () => {
     return false;
   };
 
-  // NAYA: CSV Download Function
   const downloadCSV = () => {
     if (filteredTxns.length === 0) return;
-    
-    const headers = ['Transaction ID', 'Date', 'Type', 'Description', 'Amount', 'Status'];
-    const rows = filteredTxns.map(t => [
-      t._id,
-      new Date(t.createdAt).toLocaleString(),
-      isCredit(t) ? 'Credit' : 'Debit',
-      t.description || 'N/A',
-      t.amount,
-      t.status
-    ]);
-
+    const headers = ['Transaction ID', 'Date', 'Mode', 'Type', 'Description', 'Amount', 'Status'];
+    const rows = filteredTxns.map(t => [t._id, new Date(t.createdAt).toLocaleString(), t.mode || 'N/A', isCredit(t) ? 'Credit' : 'Debit', t.description || 'N/A', t.amount, t.status]);
     const csvContent = [headers, ...rows].map(e => e.join(',')).join('\n');
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'finbit_statement.csv';
-    link.click();
-    setToast({ message: 'Statement downloaded successfully!', type: 'success' });
+    const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'finbit_statement.csv'; link.click();
+    setToast({ message: 'Statement downloaded!', type: 'success' });
   };
 
-  if (loading) return <div className="page"><p>Loading history...</p></div>;
+  if (loading) return <div className="page"><p>Loading...</p></div>;
 
   return (
     <div className="page">
@@ -84,8 +62,8 @@ const Transactions = () => {
         <input type="text" placeholder="Search..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
         <select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
           <option value="all">All</option>
-          <option value="credit">Income (Credit)</option>
-          <option value="debit">Expense (Debit)</option>
+          <option value="credit">Income</option>
+          <option value="debit">Expense</option>
         </select>
       </div>
       
@@ -99,7 +77,7 @@ const Transactions = () => {
               <div key={t._id} className="txn-item" onClick={() => setSelectedTxn(t)} style={{ cursor: 'pointer' }}>
                 <div className="txn-icon">{credit ? '↓' : '↑'}</div>
                 <div className="txn-details">
-                  <p className="txn-type">{credit ? 'Received' : 'Sent'} {t.type === 'transfer' ? 'Transfer' : t.type}</p>
+                  <p className="txn-type">{credit ? 'Received' : 'Sent'} {t.type === 'transfer' ? 'Transfer' : t.type} <span style={{ color: '#6366f1', fontSize: '0.85rem' }}>({t.mode || 'Internal'})</span></p>
                   <p className="txn-date">{new Date(t.createdAt).toLocaleString()}</p>
                   {t.description && <p className="txn-desc">{t.description}</p>}
                 </div>
@@ -115,8 +93,9 @@ const Transactions = () => {
       {selectedTxn && (
         <div className="modal-overlay" onClick={() => setSelectedTxn(null)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h2>🧾 Receipt</h2>
+            <h2>🧾 Transaction Receipt</h2>
             <div className="receipt-row"><span>ID:</span><span>{selectedTxn._id.slice(-8).toUpperCase()}</span></div>
+            <div className="receipt-row"><span>Mode:</span><span>{selectedTxn.mode || 'Internal'}</span></div>
             <div className="receipt-row"><span>Date:</span><span>{new Date(selectedTxn.createdAt).toLocaleString()}</span></div>
             <div className="receipt-row"><span>Amount:</span><span className={isCredit(selectedTxn) ? 'text-green' : 'text-red'}>₹{selectedTxn.amount}</span></div>
             <div className="receipt-row"><span>Status:</span><span className="text-green">{selectedTxn.status}</span></div>

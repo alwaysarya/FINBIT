@@ -4,7 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 import Toast from '../components/Toast';
 
 const Transfer = () => {
-  const [form, setForm] = useState({ toAccountNumber: '', amount: '', description: '' });
+  const [form, setForm] = useState({ toAccountNumber: '', amount: '', description: '', mode: 'UPI' }); // NAYA: mode
   const [toast, setToast] = useState({ message: '', type: 'success' });
   const [contacts, setContacts] = useState([]);
   const { updateBalance } = useContext(AuthContext);
@@ -25,8 +25,8 @@ const Transfer = () => {
     try {
       const res = await api.post('/transaction/transfer', form);
       updateBalance(res.data.newBalance);
-      setToast({ message: `Transfer successful! New balance: ₹${res.data.newBalance}`, type: 'success' });
-      setForm({ toAccountNumber: '', amount: '', description: '' });
+      setToast({ message: `Transfer successful via ${form.mode}! New balance: ₹${res.data.newBalance}`, type: 'success' });
+      setForm({ ...form, toAccountNumber: '', amount: '', description: '' });
     } catch (err) {
       setToast({ message: err.response?.data?.message || 'Transfer failed', type: 'error' });
     }
@@ -38,7 +38,6 @@ const Transfer = () => {
       
       <h1>💸 Transfer Money</h1>
 
-      {/* NAYA: Recent Contacts UI */}
       {contacts.length > 0 && (
         <div className="recent-contacts">
           <h3>Recent Contacts</h3>
@@ -53,10 +52,32 @@ const Transfer = () => {
       )}
 
       <form onSubmit={handleSubmit} className="form">
-        <input name="toAccountNumber" placeholder="Receiver Account Number (10 digits)" value={form.toAccountNumber} onChange={handleChange} required />
+        {/* NAYA: Transfer Mode Select */}
+        <div className="input-group">
+          <label>Transfer Mode</label>
+          <div style={{ display: 'flex', gap: '0.5rem' }}>
+            {['UPI', 'NEFT', 'IMPS', 'Internal'].map(m => (
+              <button
+                key={m}
+                type="button"
+                onClick={() => setForm({ ...form, mode: m })}
+                style={{
+                  flex: 1, padding: '0.6rem', borderRadius: '6px',
+                  background: form.mode === m ? '#6366f1' : '#1e293b',
+                  color: 'white', border: '1px solid #334155', cursor: 'pointer', fontWeight: 600,
+                }}
+              >
+                {m}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <input name="toAccountNumber" placeholder="Receiver Account Number" value={form.toAccountNumber} onChange={handleChange} required />
         <input name="amount" type="number" placeholder="Amount (₹)" value={form.amount} onChange={handleChange} required />
         <input name="description" placeholder="Description (optional)" value={form.description} onChange={handleChange} />
-        <button type="submit">Send Money</button>
+        
+        <button type="submit">Send via {form.mode}</button>
       </form>
     </div>
   );

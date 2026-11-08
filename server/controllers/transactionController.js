@@ -2,10 +2,15 @@ const Account = require('../models/Account');
 const Transaction = require('../models/Transaction');
 const Notification = require('../models/Notification');
 const User = require('../models/User');
+const Ledger = require('../models/Ledger');
+
+const recordLedger = async (accountId, transactionId, type, amount, description) => {
+  await Ledger.create({ account: accountId, transaction: transactionId, entryType: type, amount, description });
+};
 
 const transferMoney = async (req, res, next) => {
   try {
-    const { toAccountNumber, amount, description } = req.body;
+    const { toAccountNumber, amount, description, mode } = req.body; // NAYA: mode
     if (!toAccountNumber || !amount || amount <= 0) { res.status(400); throw new Error('Invalid details'); }
     
     const senderAccount = await Account.findOne({ user: req.user._id });
@@ -21,17 +26,17 @@ const transferMoney = async (req, res, next) => {
     await receiverAccount.save();
 
     const transaction = await Transaction.create({
-      fromAccount: senderAccount._id, toAccount: receiverAccount._id, amount: Number(amount), type: 'transfer', status: 'success', description: description || 'Money transfer',
+      fromAccount: senderAccount._id, toAccount: receiverAccount._id, amount: Number(amount), type: 'transfer', mode: mode || 'UPI', status: 'success', description: description || 'Money transfer',
     });
 
-    // NAYA: Reward Points (Har ₹100 pe 1 point)
+    await recordLedger(senderAccount._id, transaction._id, 'debit', amount, 'Transfer sent');
+    await recordLedger(receiverAccount._id, transaction._id, 'credit', amount, 'Transfer received');
+
     const pointsEarned = Math.floor(amount / 100);
-    if (pointsEarned > 0) {
-      await User.findByIdAndUpdate(senderAccount.user, { $inc: { rewardPoints: pointsEarned } });
-    }
+    if (pointsEarned > 0) await User.findByIdAndUpdate(senderAccount.user, { $inc: { rewardPoints: pointsEarned } });
 
     await Notification.create([
-      { user: senderAccount.user, title: 'Money Sent', message: `You sent ₹${amount} to A/C ${toAccountNumber}.` },
+      { user: senderAccount.user, title: 'Money Sent', message: `You sent ₹${amount} via ${mode || 'UPI'} to A/C ${toAccountNumber}.` },
       { user: receiverAccount.user, title: 'Money Received', message: `You received ₹${amount} from A/C ${senderAccount.accountNumber}.` }
     ]);
 
@@ -48,13 +53,12 @@ const depositMoney = async (req, res, next) => {
     account.balance += Number(amount);
     await account.save();
 
-    // NAYA: Deposit pe bhi points
-    const pointsEarned = Math.floor(amount / 100);
-    if (pointsEarned > 0) {
-      await User.findByIdAndUpdate(req.user._id, { $inc: { rewardPoints: pointsEarned } });
-    }
+    const transaction = await Transaction.create({ toAccount: account._id, amount: Number(amount), type: 'credit', mode: 'UPI', status: 'success', description: 'Deposit' });
+    await recordLedger(account._id, transaction._id, 'credit', amount, 'Deposit received');
 
-    const transaction = await Transaction.create({ toAccount: account._id, amount: Number(amount), type: 'credit', status: 'success', description: 'Deposit' });
+    const pointsEarned = Math.floor(amount / 100);
+    if (pointsEarned > 0) await User.findByIdAndUpdate(req.user._id, { $inc: { rewardPoints: pointsEarned } });
+
     await Notification.create({ user: req.user._id, title: 'Deposit Successful', message: `₹${amount} has been added to your account.` });
 
     res.status(201).json({ message: 'Deposit successful', transaction, newBalance: account.balance });
@@ -73,15 +77,14 @@ const payBill = async (req, res, next) => {
     account.balance -= Number(amount);
     await account.save();
 
-    // NAYA: Bill payment pe bhi points
-    const pointsEarned = Math.floor(amount / 100);
-    if (pointsEarned > 0) {
-      await User.findByIdAndUpdate(req.user._id, { $inc: { rewardPoints: pointsEarned } });
-    }
-
     const transaction = await Transaction.create({
-      fromAccount: account._id, amount: Number(amount), type: 'debit', status: 'success', description: `${billType} - ${billerName}`,
+      fromAccount: account._id, amount: Number(amount), type: 'debit', mode: 'UPI', status: 'success', description: `${billType} - ${billerName}`,
     });
+
+    await recordLedger(account._id, transaction._id, 'debit', amount, `${billType} - ${billerName}`);
+
+    const pointsEarned = Math.floor(amount / 100);
+    if (pointsEarned > 0) await User.findByIdAndUpdate(req.user._id, { $inc: { rewardPoints: pointsEarned } });
 
     await Notification.create({ user: req.user._id, title: `${billType} Paid`, message: `₹${amount} paid for ${billerName}.` });
 

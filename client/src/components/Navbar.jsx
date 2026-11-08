@@ -31,7 +31,9 @@ const Navbar = () => {
             <Link to="/dashboard">Dashboard</Link>
             <Link to="/card">My Card</Link>
             <Link to="/transfer">Transfer</Link>
-            <Link to="/scheduled">📅 Scheduled</Link> {/* <-- NAYA LINK */}
+            <Link to="/loans">Loans</Link> {/* <-- NAYA LINK */}
+            <Link to="/recurring">🔁 Auto-Pay</Link>
+            <Link to="/scheduled">📅 Scheduled</Link>
             <Link to="/requests">Requests</Link>
             <Link to="/rewards">🎁 Rewards</Link>
             <Link to="/goals">Goals</Link>
