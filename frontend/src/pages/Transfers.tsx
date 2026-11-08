@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowUpRight, ArrowDownRight, Plus, Loader2, Search, ChevronRight } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight, Plus, Loader2, ChevronRight } from 'lucide-react';
 import TopNav from '../components/TopNav';
 import { apiFetch } from '../lib/api';
 
@@ -10,6 +10,8 @@ export default function Transfers() {
   const [transactions, setTransactions] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+
+  const [visibleCount, setVisibleCount] = useState(10); // Pagination
 
   useEffect(() => {
     const fetchTx = async () => {
@@ -36,28 +38,30 @@ export default function Transfers() {
     navigate('/login');
   };
 
-  const filtered = transactions.filter(tx => 
+  const filtered = transactions.filter(tx =>
     (tx.description || tx.type).toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const displayed = filtered.slice(0, visibleCount);
 
   if (isLoading) return <div className="min-h-screen bg-black flex items-center justify-center"><Loader2 className="animate-spin text-white" /></div>;
 
   return (
     <div className="min-h-screen bg-black text-white font-sans flex flex-col">
       <TopNav user={user} searchQuery={searchQuery} setSearchQuery={setSearchQuery} onLogout={handleLogout} />
-      
+
       <main className="flex-1 p-4 sm:p-6 md:p-8 max-w-5xl mx-auto w-full">
         <h1 className="text-3xl font-semibold mb-6">History</h1>
-        
+
         <div className="bg-[#1C1C1E] rounded-3xl overflow-hidden border border-white/10">
-          {filtered.length === 0 ? (
+          {displayed.length === 0 ? (
             <div className="p-8 text-center text-gray-500">No transactions found.</div>
           ) : (
-            filtered.map((tx, i) => (
-              <div 
-                key={tx.id} 
-                onClick={() => navigate(`/transaction/${tx.id}`)} 
-                className={`flex items-center justify-between p-4 sm:p-5 hover:bg-[#2C2C2E] transition-colors cursor-pointer ${i !== filtered.length - 1 ? 'border-b border-white/5' : ''}`}
+            displayed.map((tx, i) => (
+              <div
+                key={tx.id}
+                onClick={() => navigate(`/transaction/${tx.id}`)}
+                className={`flex items-center justify-between p-4 sm:p-5 hover:bg-[#2C2C2E] transition-colors cursor-pointer ${i !== displayed.length - 1 ? 'border-b border-white/5' : ''}`}
               >
                 <div className="flex items-center gap-4">
                   <div className={`w-12 h-12 rounded-full flex items-center justify-center ${tx.type === 'TRANSFER_IN' || tx.type === 'DEPOSIT' ? 'bg-[#30D158]/10 text-[#30D158]' : 'bg-white/10 text-white'}`}>
@@ -78,6 +82,18 @@ export default function Transfers() {
             ))
           )}
         </div>
+
+        {visibleCount < filtered.length && (
+          <div className="mt-6 flex justify-center">
+            <button
+              onClick={() => setVisibleCount(prev => prev + 10)}
+              className="px-6 py-3 bg-[#1C1C1E] border border-white/10 rounded-full text-sm font-medium hover:bg-[#2C2C2E] transition-colors"
+            >
+              Load More
+            </button>
+          </div>
+        )}
+
       </main>
     </div>
   );
