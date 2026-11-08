@@ -1,0 +1,254 @@
+import { useNavigate } from 'react-router-dom';
+import { Shield, Zap, ArrowRight, BarChart3, Globe, CheckCircle2, Lock, Layers, Command, Sparkles, MousePointer2 } from 'lucide-react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+
+export default function LandingPage() {
+  const navigate = useNavigate();
+  
+  const { scrollY } = useScroll();
+  const heroY = useTransform(scrollY, [0, 500], [0, 150]);
+  const heroOpacity = useTransform(scrollY, [0, 300], [1, 0]);
+  const mockupY = useTransform(scrollY, [0, 500], [0, -50]);
+
+  const fadeUp = {
+    hidden: { opacity: 0, y: 40 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" as const } }
+  };
+
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+  };
+
+  return (
+    <div className="min-h-screen bg-[#000000] text-white font-sans selection:bg-white/20 overflow-x-hidden relative">
+      
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[80vw] h-[50vh] bg-gradient-to-b from-white/10 to-transparent blur-[120px] rounded-full pointer-events-none z-0"></div>
+
+      <nav className="fixed top-0 w-full z-50 border-b border-white/10 bg-black/40 backdrop-blur-xl">
+        <div className="flex items-center justify-between px-6 md:px-12 py-4 max-w-7xl mx-auto">
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
+            <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center">
+              <Command size={18} className="text-black" />
+            </div>
+            <span className="text-xl font-semibold tracking-tight">Finbit</span>
+          </div>
+          
+          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400">
+            <a href="#features" className="hover:text-white transition-colors duration-300">Features</a>
+            <a href="#pricing" className="hover:text-white transition-colors duration-300">Pricing</a>
+            <a href="#testimonials" className="hover:text-white transition-colors duration-300">Customers</a>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={() => navigate('/login')}
+              className="text-sm font-medium text-slate-300 hover:text-white transition-colors duration-300 px-4 py-2"
+            >
+              Log in
+            </button>
+            <button 
+              onClick={() => navigate('/login')}
+              className="px-5 py-2 text-sm bg-white text-black font-semibold rounded-full hover:bg-slate-200 hover:scale-105 transition-all duration-300"
+            >
+              Start building
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <motion.main 
+        style={{ y: heroY, opacity: heroOpacity }}
+        className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 pt-40 pb-20 flex flex-col items-center text-center"
+      >
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-slate-300 mb-8 hover:bg-white/10 transition-colors cursor-default backdrop-blur-md"
+        >
+          <Sparkles size={14} className="text-slate-300" />
+          <span>Announcing our Series A funding</span>
+          <ArrowRight size={14} className="ml-1 text-slate-500" />
+        </motion.div>
+        
+        <motion.h1 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="text-5xl md:text-7xl lg:text-8xl font-semibold tracking-tighter mb-8 max-w-5xl leading-[1.05]"
+        >
+          Financial infrastructure <br className="hidden md:block" />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-300 to-slate-600">
+            for the internet economy.
+          </span>
+        </motion.h1>
+        
+        <motion.p 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="text-lg md:text-xl text-slate-400 max-w-2xl mb-12 leading-relaxed"
+        >
+          Finbit provides the APIs, dashboards, and infrastructure to build, manage, and scale your company's financial operations globally.
+        </motion.p>
+
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
+        >
+          <button 
+            onClick={() => navigate('/login')}
+            className="group w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 bg-white text-black font-semibold rounded-full hover:bg-slate-200 hover:scale-105 transition-all duration-300 shadow-[0_0_40px_rgba(255,255,255,0.2)]"
+          >
+            Start for free 
+            <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+          </button>
+          <button className="w-full sm:w-auto px-8 py-4 bg-transparent border border-white/20 text-white font-medium rounded-full hover:bg-white/5 hover:border-white/40 transition-all duration-300 backdrop-blur-md flex items-center justify-center gap-2">
+            <Command size={16} /> Book a demo
+          </button>
+        </motion.div>
+      </motion.main>
+
+      <motion.div 
+        style={{ y: mockupY }}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1, delay: 0.6 }}
+        className="relative z-10 w-[90%] max-w-6xl mx-auto rounded-3xl border border-white/20 bg-black/40 p-3 shadow-[0_0_100px_rgba(255,255,255,0.05)] backdrop-blur-2xl mb-32"
+      >
+        <div className="w-full rounded-2xl bg-[#0a0a0a] border border-white/10 overflow-hidden relative">
+          <div className="h-12 border-b border-white/10 flex items-center px-4 gap-2 bg-[#111]">
+            <div className="w-3 h-3 rounded-full bg-[#ff5f56]"></div>
+            <div className="w-3 h-3 rounded-full bg-[#ffbd2e]"></div>
+            <div className="w-3 h-3 rounded-full bg-[#27c93f]"></div>
+          </div>
+          
+          <div className="p-8 md:p-12 grid grid-cols-1 md:grid-cols-3 gap-6 text-left relative">
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
+            {[
+              { icon: <BarChart3 size={24} />, title: 'Total Revenue', val: '$2,840,500', trend: '+14.5%' },
+              { icon: <Globe size={24} />, title: 'Global Volume', val: '$1,240,000', trend: '+8.2%' },
+              { icon: <Zap size={24} />, title: 'Active Users', val: '24,590', trend: '+22.1%' }
+            ].map((item, i) => (
+              <div key={i} className="bg-[#151515] rounded-2xl p-6 border border-white/5 relative z-20">
+                <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 text-slate-300">
+                  {item.icon}
+                </div>
+                <div className="text-sm text-slate-400 mb-2">{item.title}</div>
+                <div className="text-3xl font-semibold mb-2">{item.val}</div>
+                <div className="text-sm font-medium text-emerald-400">{item.trend}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </motion.div>
+
+      <section id="features" className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 py-32">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeUp}
+          className="text-center mb-20"
+        >
+          <h2 className="text-4xl md:text-6xl font-semibold tracking-tighter mb-6">Built for scale.</h2>
+          <p className="text-slate-400 max-w-2xl mx-auto text-xl">Everything you need to run your financial stack, without the bloat.</p>
+        </motion.div>
+
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6"
+        >
+          <motion.div variants={fadeUp} className="md:col-span-2 p-10 rounded-3xl bg-gradient-to-b from-[#111] to-[#050505] border border-white/10 hover:border-white/30 transition-all duration-500 group overflow-hidden relative">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 blur-[80px] rounded-full group-hover:bg-white/10 transition-colors"></div>
+            <div className="relative z-10">
+              <div className="w-12 h-12 rounded-xl bg-white/10 border border-white/10 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+                <BarChart3 className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-3xl font-semibold mb-4">Real-time Analytics</h3>
+              <p className="text-slate-400 leading-relaxed max-w-md text-lg">Monitor your cash flow, revenue, and expenses with millisecond latency. Custom dashboards built for your team.</p>
+            </div>
+            
+            <div className="mt-12 flex items-end gap-2 h-32 opacity-80 group-hover:opacity-100 transition-opacity relative z-10">
+              {[30, 45, 25, 60, 50, 75, 40, 90, 65, 80, 55, 95].map((h, i) => (
+                <motion.div 
+                  key={i} 
+                  initial={{ height: 0 }}
+                  whileInView={{ height: `${h}%` }}
+                  transition={{ duration: 1, delay: i * 0.05 }}
+                  className="flex-1 bg-gradient-to-t from-white/10 to-white/40 rounded-t-sm"
+                ></motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          <motion.div variants={fadeUp} className="p-10 rounded-3xl bg-[#0a0a0a] border border-white/10 hover:border-white/30 transition-all duration-500 group flex flex-col justify-between">
+            <div>
+              <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+                <Lock className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-2xl font-semibold mb-4">Bank-grade Security</h3>
+              <p className="text-slate-400 leading-relaxed">SOC2 Type II compliant. Your data is encrypted with AES-256 at rest and TLS 1.3 in transit.</p>
+            </div>
+            <div className="mt-12 flex justify-end opacity-20 group-hover:opacity-100 transition-opacity duration-500">
+              <Shield size={80} className="text-white" />
+            </div>
+          </motion.div>
+
+          <motion.div variants={fadeUp} className="p-10 rounded-3xl bg-[#0a0a0a] border border-white/10 hover:border-white/30 transition-all duration-500 group">
+            <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+              <Globe className="w-6 h-6 text-white" />
+            </div>
+            <h3 className="text-2xl font-semibold mb-4">Global Payments</h3>
+            <p className="text-slate-400 leading-relaxed">Accept and send payments in 135+ currencies. Automated currency conversion and routing.</p>
+            <div className="mt-8 h-24 w-full bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=600')] bg-cover bg-center rounded-xl opacity-30 group-hover:opacity-70 transition-opacity duration-500 border border-white/10"></div>
+          </motion.div>
+
+          <motion.div variants={fadeUp} className="md:col-span-2 p-10 rounded-3xl bg-gradient-to-br from-[#111] to-[#050505] border border-white/10 hover:border-white/30 transition-all duration-500 group relative overflow-hidden">
+            <div className="relative z-10">
+              <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+                <Layers className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-3xl font-semibold mb-4">Developer First APIs</h3>
+              <p className="text-slate-400 leading-relaxed max-w-md text-lg">Integrate Finbit directly into your existing stack with our REST APIs, Webhooks, and SDKs.</p>
+            </div>
+            
+            <div className="mt-10 bg-black/80 rounded-2xl border border-white/10 p-6 font-mono text-sm text-slate-300 relative z-10 shadow-2xl group-hover:border-white/20 transition-colors">
+              <div className="flex gap-2 mb-4">
+                <div className="w-2.5 h-2.5 rounded-full bg-white/20"></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-white/20"></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-white/20"></div>
+              </div>
+              <p><span className="text-pink-400">const</span> finbit = <span className="text-blue-400">require</span>(<span className="text-green-300">'@finbit/sdk'</span>);</p>
+              <p className="mt-2"><span className="text-pink-400">const</span> payment = <span className="text-pink-400">await</span> finbit.payments.create({'{'}</p>
+              <p className="ml-4 text-slate-400">amount: <span className="text-yellow-300">10000</span>,</p>
+              <p className="ml-4 text-slate-400">currency: <span className="text-green-300">'usd'</span>,</p>
+              <p>{'}'});</p>
+            </div>
+          </motion.div>
+        </motion.div>
+      </section>
+
+      <footer className="relative z-10 border-t border-white/10 py-12 bg-black">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between text-slate-500 text-sm">
+          <div className="flex items-center gap-3 mb-4 md:mb-0">
+            <Command size={18} className="text-slate-400" />
+            <span>© {new Date().getFullYear()} Finbit Inc. All rights reserved.</span>
+          </div>
+          <div className="flex gap-6">
+            <a href="#" className="hover:text-white transition-colors">Privacy</a>
+            <a href="#" className="hover:text-white transition-colors">Terms</a>
+            <a href="#" className="hover:text-white transition-colors">Status</a>
+          </div>
+        </div>
+      </footer>
+
+    </div>
+  );
+}
