@@ -8,7 +8,10 @@ import Dashboard from './pages/Dashboard';
 import Transfer from './pages/Transfer';
 import Transactions from './pages/Transactions';
 import Deposit from './pages/Deposit';
-import Profile from './pages/Profile'; // <-- Naya import
+import Profile from './pages/Profile';
+import Bills from './pages/Bills';
+import FixedDeposit from './pages/FixedDeposit';
+import Beneficiaries from './pages/Beneficiaries'; // <-- Import
 
 const Protected = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
@@ -29,7 +32,10 @@ const App = () => {
           <Route path="/deposit" element={<Protected><Deposit /></Protected>} />
           <Route path="/transfer" element={<Protected><Transfer /></Protected>} />
           <Route path="/transactions" element={<Protected><Transactions /></Protected>} />
-          <Route path="/profile" element={<Protected><Profile /></Protected>} /> {/* <-- Naya route */}
+          <Route path="/profile" element={<Protected><Profile /></Protected>} />
+          <Route path="/bills" element={<Protected><Bills /></Protected>} />
+          <Route path="/fd" element={<Protected><FixedDeposit /></Protected>} />
+          <Route path="/beneficiaries" element={<Protected><Beneficiaries /></Protected>} /> {/* <-- Route */}
         </Routes>
       </BrowserRouter>
     </AuthProvider>

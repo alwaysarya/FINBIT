@@ -325,3 +325,175 @@ button:hover { opacity: 0.9; }
   font-weight: 600;
 }
 .close-btn:hover { background: #475569; }
+
+/* Naye Features ki Styling */
+.recent-contacts {
+  margin-bottom: 2rem;
+}
+.contact-chips {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+.contact-chip {
+  background: #334155;
+  color: white;
+  border: 1px solid #475569;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.contact-chip:hover {
+  background: #6366f1;
+  border-color: #6366f1;
+}
+.edit-btn {
+  background: #6366f1;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 1rem;
+}
+.input-group label {
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+/* Chart Container Styling */
+.chart-container {
+  background: #1e293b;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid #334155;
+  margin-top: 2rem;
+}
+
+/* Light Mode Styling */
+body.light {
+  background: #f8fafc;
+  color: #0f172a;
+}
+body.light .navbar, 
+body.light .card, 
+body.light .profile-card, 
+body.light .chart-container, 
+body.light .auth-box, 
+body.light .txn-item,
+body.light .empty-state,
+body.light .modal-content {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  color: #0f172a;
+}
+body.light input {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+body.light .txn-table th, 
+body.light .txn-table td {
+  border-color: #e2e8f0;
+}
+body.light .txn-table th {
+  background: #f8fafc;
+}
+body.light .label {
+  color: #64748b;
+}
+
+/* Filter Bar Styling */
+.filter-bar {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.filter-bar input {
+  flex: 1;
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  background: #1e293b;
+  color: white;
+}
+.filter-bar select {
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  background: #1e293b;
+  color: white;
+  cursor: pointer;
+}
+body.light .filter-bar input,
+body.light .filter-bar select {
+  background: white;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+@media (max-width: 600px) {
+  .filter-bar { flex-direction: column; }
+}
+
+/* Notifications Dropdown Styling */
+.badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #ef4444;
+  color: white;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 50%;
+  font-weight: bold;
+}
+.notif-dropdown {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  width: 300px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 1rem;
+  z-index: 100;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  max-height: 400px;
+  overflow-y: auto;
+}
+.notif-dropdown h4 {
+  margin-bottom: 1rem;
+  color: #94a3b8;
+  border-bottom: 1px solid #334155;
+  padding-bottom: 0.5rem;
+}
+.notif-item {
+  padding: 0.8rem;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  background: #0f172a;
+}
+.notif-item.unread {
+  border-left: 3px solid #6366f1;
+}
+.notif-item strong {
+  font-size: 0.9rem;
+  color: #e2e8f0;
+}
+.notif-item p {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+body.light .notif-dropdown { background: white; border-color: #cbd5e1; }
+body.light .notif-item { background: #f1f5f9; }
+body.light .notif-item strong { color: #0f172a; }
