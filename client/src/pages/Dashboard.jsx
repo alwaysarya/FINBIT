@@ -4,6 +4,8 @@ import { AuthContext } from '../context/AuthContext';
 import Card from '../components/Card';
 import api from '../services/api';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { motion } from 'framer-motion';
+import { Wallet, Hash, Plus, ArrowUpRight, Clock, PlusCircle } from 'lucide-react';
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
@@ -25,59 +27,49 @@ const Dashboard = () => {
     }
   }, [user]);
 
-  const handleOpenAccount = async () => {
-    try {
-      const res = await api.post('/account/open', { accountType: newAccountType });
-      alert(`New ${newAccountType} account created! A/C: ${res.data.account.accountNumber}`);
-      setShowOpenAccount(false);
-      window.location.reload(); // Reload to see new account
-    } catch (err) {
-      alert(err.response?.data?.message || 'Failed to open account');
-    }
-  };
-
   if (!user) { navigate('/login'); return null; }
 
   return (
     <div className="page">
-      <h1>Welcome, {user.name} 👋</h1>
+      <h1>Good morning, {user.name.split(' ')[0]}</h1>
       
       <div className="card-grid">
-        <Card title="Account Balance" value={`₹ ${user.account?.balance?.toLocaleString()}`} subtitle={`${user.account?.accountType} account`} color="#10b981" />
-        <Card title="Account Number" value={user.account?.accountNumber} subtitle="Primary A/C" color="#4f46e5" />
+        <motion.div whileHover={{ scale: 1.01 }}><Card title={<><Wallet size={16}/> Total Balance</>} value={`₹ ${user.account?.balance?.toLocaleString()}`} subtitle={`${user.account?.accountType} account`} /></motion.div>
+        <motion.div whileHover={{ scale: 1.01 }}><Card title={<><Hash size={16}/> Account Number</>} value={user.account?.accountNumber} subtitle="Primary A/C" /></motion.div>
       </div>
 
-      <div className="quick-actions" style={{ marginBottom: '2rem' }}>
-        <button onClick={() => navigate('/deposit')}>💰 Add Money</button>
-        <button onClick={() => navigate('/transfer')}>💸 Transfer Money</button>
-        <button onClick={() => navigate('/transactions')}>📜 View History</button>
-        <button onClick={() => setShowOpenAccount(!showOpenAccount)} style={{ background: '#f59e0b' }}>➕ Open New Account</button>
+      <div className="quick-actions">
+        <button onClick={() => navigate('/deposit')}><Plus size={18} /> Add Money</button>
+        <button onClick={() => navigate('/transfer')}><ArrowUpRight size={18} /> Send Money</button>
+        <button onClick={() => navigate('/transactions')}><Clock size={18} /> View History</button>
+        <button onClick={() => setShowOpenAccount(!showOpenAccount)}><PlusCircle size={18} /> Open Account</button>
       </div>
 
       {showOpenAccount && (
-        <div className="card" style={{ marginBottom: '2rem', maxWidth: '400px' }}>
+        <motion.div className="card" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} style={{ marginBottom: '2rem', maxWidth: '400px' }}>
           <h3>Open New Account</h3>
-          <div className="input-group">
-            <label>Account Type</label>
-            <select value={newAccountType} onChange={(e) => setNewAccountType(e.target.value)}>
-              <option value="savings">Savings Account</option>
-              <option value="current">Current Account</option>
-            </select>
-          </div>
-          <button onClick={handleOpenAccount} style={{ width: '100%', background: '#10b981' }}>Create Account</button>
-        </div>
+          <select value={newAccountType} onChange={(e) => setNewAccountType(e.target.value)} style={{ marginBottom: '1rem' }}>
+            <option value="savings">Savings Account</option>
+            <option value="current">Current Account</option>
+          </select>
+          <button onClick={async () => {
+             const res = await api.post('/account/open', { accountType: newAccountType });
+             alert(`New account created! A/C: ${res.data.account.accountNumber}`);
+             window.location.reload();
+          }} style={{ width: '100%' }}>Create Account</button>
+        </motion.div>
       )}
 
       <div className="chart-container">
-        <h3>📊 Income vs Expense</h3>
+        <h3>Cash Flow</h3>
         <div style={{ width: '100%', height: 300, marginTop: '1rem' }}>
           <ResponsiveContainer>
-            <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
-              <XAxis dataKey="name" stroke="#94a3b8" />
-              <YAxis stroke="#94a3b8" />
-              <Tooltip cursor={{ fill: 'transparent' }} contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '8px', color: '#fff' }} />
+            <BarChart data={chartData}>
+              <XAxis dataKey="name" stroke="var(--text-secondary)" />
+              <YAxis stroke="var(--text-secondary)" />
+              <Tooltip cursor={{ fill: '#2A2A2A' }} contentStyle={{ backgroundColor: '#1E1E1E', border: '1px solid #333', borderRadius: '8px', color: '#FFF' }} />
               <Legend />
-              <Bar dataKey="Amount" radius={[8, 8, 0, 0]} />
+              <Bar dataKey="Amount" radius={[6, 6, 0, 0]} fill="var(--accent-primary)" />
             </BarChart>
           </ResponsiveContainer>
         </div>

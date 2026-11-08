@@ -2,6 +2,8 @@ import { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { AuthContext } from '../context/AuthContext';
+import { Landmark, LogIn } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -24,17 +26,18 @@ const Login = () => {
 
   return (
     <div className="auth-container">
-      <div className="auth-box">
-        <h1>🏦 FINBIT</h1>
-        <h2>Welcome back</h2>
-        {error && <p className="error">{error}</p>}
+      <motion.div className="auth-box" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+        <h1><Landmark size={28} color="var(--accent-primary)" /> FINBIT</h1>
+        <h2>Sign in to your account</h2>
+        {error && <p style={{ color: 'var(--danger)', marginBottom: '1rem', fontSize: '0.9rem' }}>{error}</p>}
         <form onSubmit={handleSubmit}>
-          <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <input type="email" placeholder="Email address" value={email} onChange={(e) => setEmail(e.target.value)} required />
           <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-          <button type="submit">Login</button>
+          <button type="submit" style={{ marginTop: '0.5rem' }}><LogIn size={18} /> Sign In</button>
         </form>
-        <p>New here? <Link to="/register">Create account</Link></p>
-      </div>
+        <p><Link to="/forgot-password">Forgot password?</Link></p>
+        <p>Don't have an account? <Link to="/register">Sign up</Link></p>
+      </motion.div>
     </div>
   );
 };

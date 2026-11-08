@@ -2,9 +2,10 @@ import { useState, useContext, useEffect } from 'react';
 import api from '../services/api';
 import { AuthContext } from '../context/AuthContext';
 import Toast from '../components/Toast';
+import { motion } from 'framer-motion';
 
 const Transfer = () => {
-  const [form, setForm] = useState({ toAccountNumber: '', amount: '', description: '', mode: 'UPI' }); // NAYA: mode
+  const [form, setForm] = useState({ toAccountNumber: '', amount: '', description: '', mode: 'UPI' });
   const [toast, setToast] = useState({ message: '', type: 'success' });
   const [contacts, setContacts] = useState([]);
   const { updateBalance } = useContext(AuthContext);
@@ -14,10 +15,7 @@ const Transfer = () => {
   }, []);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
-
-  const handleContactClick = (accountNumber) => {
-    setForm({ ...form, toAccountNumber: accountNumber });
-  };
+  const handleContactClick = (accountNumber) => setForm({ ...form, toAccountNumber: accountNumber });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,38 +31,42 @@ const Transfer = () => {
   };
 
   return (
-    <div className="page">
+    <motion.div className="page" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
       <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: '', type: 'success' })} />
       
-      <h1>💸 Transfer Money</h1>
+      <h1>💸 Send Money</h1>
 
       {contacts.length > 0 && (
-        <div className="recent-contacts">
-          <h3>Recent Contacts</h3>
-          <div className="contact-chips">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
+          <h3 style={{ marginBottom: '1rem' }}>Recent Contacts</h3>
+          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '2rem' }}>
             {contacts.map((c, i) => (
-              <button key={i} type="button" onClick={() => handleContactClick(c.accountNumber)} className="contact-chip">
+              <motion.button 
+                key={i} 
+                type="button" 
+                onClick={() => handleContactClick(c.accountNumber)} 
+                whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+                style={{ background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', color: 'white', padding: '0.6rem 1.2rem', borderRadius: '20px', cursor: 'pointer', fontWeight: 500 }}
+              >
                 👤 {c.name}
-              </button>
+              </motion.button>
             ))}
           </div>
-        </div>
+        </motion.div>
       )}
 
-      <form onSubmit={handleSubmit} className="form">
-        {/* NAYA: Transfer Mode Select */}
+      <motion.form onSubmit={handleSubmit} className="form" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
         <div className="input-group">
           <label>Transfer Mode</label>
           <div style={{ display: 'flex', gap: '0.5rem' }}>
             {['UPI', 'NEFT', 'IMPS', 'Internal'].map(m => (
               <button
-                key={m}
-                type="button"
-                onClick={() => setForm({ ...form, mode: m })}
+                key={m} type="button" onClick={() => setForm({ ...form, mode: m })}
                 style={{
-                  flex: 1, padding: '0.6rem', borderRadius: '6px',
-                  background: form.mode === m ? '#6366f1' : '#1e293b',
-                  color: 'white', border: '1px solid #334155', cursor: 'pointer', fontWeight: 600,
+                  flex: 1, padding: '0.7rem', borderRadius: '10px',
+                  background: form.mode === m ? 'var(--accent-primary)' : 'var(--glass-bg)',
+                  color: 'white', border: '1px solid var(--glass-border)', cursor: 'pointer', fontWeight: 600,
+                  boxShadow: form.mode === m ? '0 4px 14px var(--accent-glow)' : 'none',
                 }}
               >
                 {m}
@@ -77,9 +79,9 @@ const Transfer = () => {
         <input name="amount" type="number" placeholder="Amount (₹)" value={form.amount} onChange={handleChange} required />
         <input name="description" placeholder="Description (optional)" value={form.description} onChange={handleChange} />
         
-        <button type="submit">Send via {form.mode}</button>
-      </form>
-    </div>
+        <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} type="submit">Send via {form.mode}</motion.button>
+      </motion.form>
+    </motion.div>
   );
 };
 

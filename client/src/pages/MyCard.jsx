@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import api from '../services/api';
 import { AuthContext } from '../context/AuthContext';
 import Toast from '../components/Toast';
+import { motion } from 'framer-motion';
 
 const MyCard = () => {
   const { user } = useContext(AuthContext);
@@ -25,44 +26,42 @@ const MyCard = () => {
   if (!card) return <div className="page">Loading Card...</div>;
 
   return (
-    <div className="page">
+    <motion.div className="page" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
       <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: '', type: 'success' })} />
       
       <h1>💳 My Debit Card</h1>
 
-      {/* Virtual Card UI */}
-      <div className={`virtual-card ${card.isFrozen ? 'frozen' : ''}`}>
-        <div className="card-top">
-          <span className="card-chip">💳</span>
-          <span className="card-type">{card.cardType}</span>
+      <motion.div 
+        className={`virtual-card ${card.isFrozen ? 'frozen' : ''}`}
+        initial={{ rotateY: 90, opacity: 0 }}
+        animate={{ rotateY: 0, opacity: 1 }}
+        transition={{ duration: 0.8, type: 'spring' }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ fontSize: '1.5rem' }}>💳</span>
+          <span style={{ fontWeight: 600, fontSize: '1.1rem', fontStyle: 'italic' }}>{card.cardType}</span>
         </div>
         <div className="card-number">{card.cardNumber}</div>
         <div className="card-bottom">
-          <div>
-            <p className="card-label">Card Holder</p>
-            <p className="card-value">{user.name.toUpperCase()}</p>
-          </div>
-          <div>
-            <p className="card-label">Expires</p>
-            <p className="card-value">{card.expiry}</p>
-          </div>
-          <div>
-            <p className="card-label">CVV</p>
-            <p className="card-value">***</p>
-          </div>
+          <div><p className="card-label">Card Holder</p><p className="card-value">{user.name.toUpperCase()}</p></div>
+          <div><p className="card-label">Expires</p><p className="card-value">{card.expiry}</p></div>
+          <div><p className="card-label">CVV</p><p className="card-value">***</p></div>
         </div>
-      </div>
+      </motion.div>
 
-      {/* Controls */}
-      <div className="card-controls">
-        <button onClick={handleFreeze} style={{ background: card.isFrozen ? '#10b981' : '#ef4444' }}>
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} style={{ marginTop: '2rem' }}>
+        <motion.button 
+          onClick={handleFreeze} 
+          whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+          style={{ background: card.isFrozen ? 'var(--success)' : 'var(--danger)', padding: '0.8rem 2rem' }}
+        >
           {card.isFrozen ? '🔓 Unfreeze Card' : '🔒 Freeze Card'}
-        </button>
-        <p style={{ color: '#94a3b8', marginTop: '1rem', fontSize: '0.9rem' }}>
-          {card.isFrozen ? 'Your card is temporarily blocked. No transactions will be allowed.' : 'Your card is active and ready to use.'}
+        </motion.button>
+        <p style={{ color: 'var(--text-secondary)', marginTop: '1rem', fontSize: '0.9rem' }}>
+          {card.isFrozen ? 'Your card is temporarily blocked.' : 'Your card is active and ready to use.'}
         </p>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import api from '../services/api';
+import { Landmark, Bell, LogOut } from 'lucide-react';
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
@@ -20,28 +21,28 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      <Link to="/" className="logo">🏦 FINBIT</Link>
+      <Link to="/" className="logo">
+        <Landmark size={20} color="var(--accent-primary)" /> FINBIT
+      </Link>
       <div className="nav-links">
         <Link to="/dashboard">Dashboard</Link>
         <Link to="/transfer">Transfer</Link>
-        <Link to="/budget">📊 Budget</Link>
+        <Link to="/budget">Budget</Link>
         <Link to="/loans">Loans</Link>
-        <Link to="/rd">RD</Link> {/* <-- NAYA LINK */}
-        <Link to="/card">My Card</Link>
+        <Link to="/rd">RD</Link>
+        <Link to="/card">Card</Link>
         <Link to="/fd">FD</Link>
         <Link to="/bills">Bills</Link>
         <Link to="/transactions">History</Link>
-        <Link to="/refer">🎁 Refer</Link>
-        <Link to="/support">Support</Link>
         <Link to="/settings">Settings</Link>
         
-        <Link to="/notifications" style={{ textDecoration: 'none', position: 'relative' }}>
-          <span style={{ fontSize: '1.2rem' }}>🔔</span>
+        <Link to="/notifications" style={{ position: 'relative' }}>
+          <Bell size={18} />
           {unreadCount > 0 && <span className="badge">{unreadCount}</span>}
         </Link>
         
-        <span className="welcome">Hi, {user.name}</span>
-        <button onClick={handleLogout} className="logout-btn">Logout</button>
+        <span className="welcome" style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{user.name.split(' ')[0]}</span>
+        <button onClick={handleLogout} className="logout-btn"><LogOut size={16} /> Logout</button>
       </div>
     </nav>
   );
