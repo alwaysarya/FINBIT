@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Loader2, User, Lock, Save } from 'lucide-react';
 import TopNav from '../components/TopNav';
-import { apiFetch } from '../lib/api';
 
 export default function Settings() {
   const navigate = useNavigate();
@@ -25,8 +24,14 @@ export default function Settings() {
     setMsg({ text: '', type: '' });
 
     try {
-      const res = await apiFetch('/profile/update', {
+      const token = localStorage.getItem('finbit_token');
+      // Direct fetch with error handling for HTML response
+      const res = await fetch(`http://localhost:5001/api/profile/`, {
         method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({
           userId: user.id,
           name,
@@ -35,9 +40,20 @@ export default function Settings() {
         })
       });
 
-      if (res.data) {
-        localStorage.setItem('finbit_user', JSON.stringify(res.data));
-        setUser(res.data);
+      const contentType = res.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error(`Server returned non-JSON response (Status: ${res.status}). Route might be wrong.`);
+      }
+
+      const resData = await res.json();
+
+      if (!res.ok) {
+        throw new Error(resData.message || 'Update failed');
+      }
+
+      if (resData.data) {
+        localStorage.setItem('finbit_user', JSON.stringify(resData.data));
+        setUser(resData.data);
         setMsg({ text: 'Profile updated successfully!', type: 'success' });
         setCurrentPassword('');
         setNewPassword('');
@@ -71,7 +87,6 @@ export default function Settings() {
         )}
 
         <form onSubmit={handleUpdate} className="space-y-6">
-          {/* Profile Section */}
           <div className="bg-[#1C1C1E] border border-white/10 rounded-2xl p-6">
             <h2 className="text-lg font-semibold mb-4 flex items-center gap-2"><User size={18} /> Profile Details</h2>
             
@@ -99,7 +114,6 @@ export default function Settings() {
             </div>
           </div>
 
-          {/* Security Section */}
           <div className="bg-[#1C1C1E] border border-white/10 rounded-2xl p-6">
             <h2 className="text-lg font-semibold mb-4 flex items-center gap-2"><Lock size={18} /> Change Password</h2>
             
