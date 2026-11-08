@@ -86,3 +86,18 @@ const changePassword = async (req, res, next) => {
 };
 
 module.exports = { registerUser, loginUser, getMe, updateProfile, changePassword };
+
+// Direct Reset Password (OTP verify ke baad)
+const resetPasswordDirect = async (req, res, next) => {
+  try {
+    const { email, newPassword } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) { res.status(404); throw new Error('User not found'); }
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    await user.save();
+    res.json({ message: 'Password reset successfully' });
+  } catch (error) { next(error); }
+};
+
+module.exports.resetPasswordDirect = resetPasswordDirect;

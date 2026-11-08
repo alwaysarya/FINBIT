@@ -29,7 +29,9 @@ app.use('/api/admin', require('./routes/adminRoutes'));
 app.use('/api/support', require('./routes/supportRoutes'));
 app.use('/api/settings', require('./routes/settingsRoutes'));
 app.use('/api/referral', require('./routes/referralRoutes'));
-app.use('/api/budget', require('./routes/budgetRoutes')); // <-- Naya
+app.use('/api/budget', require('./routes/budgetRoutes'));
+app.use('/api/otp', require('./routes/otpRoutes'));
+app.use('/api/rd', require('./routes/rdRoutes')); // <-- Naya
 
 app.get('/', (req, res) => res.json({ message: 'FINBIT API is running 🚀' }));
 app.use(errorHandler);

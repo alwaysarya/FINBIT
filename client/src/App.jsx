@@ -4,6 +4,7 @@ import { useContext } from 'react';
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ForgotPassword from './pages/ForgotPassword';
 import Dashboard from './pages/Dashboard';
 import Transfer from './pages/Transfer';
 import Transactions from './pages/Transactions';
@@ -11,6 +12,7 @@ import Deposit from './pages/Deposit';
 import Profile from './pages/Profile';
 import Bills from './pages/Bills';
 import FixedDeposit from './pages/FixedDeposit';
+import RecurringDeposit from './pages/RecurringDeposit'; // <-- Naya
 import Beneficiaries from './pages/Beneficiaries';
 import Goals from './pages/Goals';
 import MyCard from './pages/MyCard';
@@ -24,7 +26,7 @@ import Notifications from './pages/Notifications';
 import Support from './pages/Support';
 import Settings from './pages/Settings';
 import ReferEarn from './pages/ReferEarn';
-import Budget from './pages/Budget'; // <-- Naya
+import Budget from './pages/Budget';
 
 const Protected = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
@@ -41,6 +43,7 @@ const App = () => {
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/dashboard" element={<Protected><Dashboard /></Protected>} />
           <Route path="/deposit" element={<Protected><Deposit /></Protected>} />
           <Route path="/transfer" element={<Protected><Transfer /></Protected>} />
@@ -48,6 +51,7 @@ const App = () => {
           <Route path="/profile" element={<Protected><Profile /></Protected>} />
           <Route path="/bills" element={<Protected><Bills /></Protected>} />
           <Route path="/fd" element={<Protected><FixedDeposit /></Protected>} />
+          <Route path="/rd" element={<Protected><RecurringDeposit /></Protected>} /> {/* <-- Naya */}
           <Route path="/beneficiaries" element={<Protected><Beneficiaries /></Protected>} />
           <Route path="/goals" element={<Protected><Goals /></Protected>} />
           <Route path="/card" element={<Protected><MyCard /></Protected>} />
@@ -61,7 +65,7 @@ const App = () => {
           <Route path="/support" element={<Protected><Support /></Protected>} />
           <Route path="/settings" element={<Protected><Settings /></Protected>} />
           <Route path="/refer" element={<Protected><ReferEarn /></Protected>} />
-          <Route path="/budget" element={<Protected><Budget /></Protected>} /> {/* <-- Naya */}
+          <Route path="/budget" element={<Protected><Budget /></Protected>} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

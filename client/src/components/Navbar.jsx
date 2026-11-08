@@ -24,13 +24,14 @@ const Navbar = () => {
       <div className="nav-links">
         <Link to="/dashboard">Dashboard</Link>
         <Link to="/transfer">Transfer</Link>
-        <Link to="/budget">📊 Budget</Link> {/* <-- Budget yahan hai */}
+        <Link to="/budget">📊 Budget</Link>
         <Link to="/loans">Loans</Link>
+        <Link to="/rd">RD</Link> {/* <-- NAYA LINK */}
         <Link to="/card">My Card</Link>
         <Link to="/fd">FD</Link>
         <Link to="/bills">Bills</Link>
         <Link to="/transactions">History</Link>
-        <Link to="/refer">🎁 Refer</Link> {/* <-- Refer yahan hai */}
+        <Link to="/refer">🎁 Refer</Link>
         <Link to="/support">Support</Link>
         <Link to="/settings">Settings</Link>
         
