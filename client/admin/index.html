@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FINBIT Admin Panel</title>
+    <style>
+      body { background: #0f172a; color: white; font-family: sans-serif; margin: 0; padding: 2rem; }
+      .admin-container { max-width: 1200px; margin: 0 auto; }
+      .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 1px solid #334155; padding-bottom: 1rem; }
+      .tabs { display: flex; gap: 1rem; margin-bottom: 2rem; }
+      .tab-btn { background: #1e293b; color: white; border: 1px solid #334155; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 600; }
+      .tab-btn.active { background: #6366f1; border-color: #6366f1; }
+      .admin-table { width: 100%; border-collapse: collapse; background: #1e293b; border-radius: 12px; overflow: hidden; }
+      .admin-table th, .admin-table td { padding: 1rem; text-align: left; border-bottom: 1px solid #334155; }
+      .admin-table th { background: #0f172a; color: #94a3b8; }
+      .btn { padding: 0.5rem 1rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.85rem; }
+      .btn-freeze { background: #ef4444; color: white; }
+      .btn-unfreeze { background: #10b981; color: white; }
+      .btn-reply { background: #6366f1; color: white; }
+      textarea { width: 100%; padding: 0.5rem; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: white; margin-bottom: 0.5rem; }
+    </style>
+  </head>
+  <body>
+    <div class="admin-container">
+      <div class="admin-header">
+        <h1>🏦 FINBIT Admin Panel</h1>
+        <div id="admin-info">Checking...</div>
+      </div>
+
+      <div class="tabs" id="tabs" style="display: none;">
+        <button class="tab-btn active" onclick="switchTab('users', event)">👥 Users</button>
+        <button class="tab-btn" onclick="switchTab('tickets', event)">🎫 Support Tickets</button>
+        <button class="tab-btn" onclick="switchTab('loans', event)">💰 Loans</button>
+      </div>
+
+      <div id="content"></div>
+    </div>
+    <script type="module" src="./admin.js"></script>
+  </body>
+</html>
