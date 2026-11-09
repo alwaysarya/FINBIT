@@ -130,13 +130,64 @@ const Dashboard = () => {
             <p style={{ color: '#1A1A1A', fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer' }}>Activate UPI ID</p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', textAlign: 'center' }}>
+          
+          {activePaymentTab === 'Fund Transfer' && (
+            <div style={{ background: '#FFF', border: '1px solid rgba(0,0,0,0.05)', borderRadius: '16px', padding: '2rem', marginBottom: '2rem' }}>
+              <h4 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.5rem', color: '#1A1A1A' }}>Transfer via Bank Account</h4>
+              <p style={{ color: '#666', fontSize: '0.9rem', marginBottom: '1.5rem' }}>Send money directly to any bank account using NEFT, RTGS, or IMPS.</p>
+              <button onClick={() => navigate('/transfer')} style={{ background: '#DBA030', color: '#FFF', border: 'none', padding: '0.8rem 1.5rem', borderRadius: '8px', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem' }}>Start Fund Transfer</button>
+            </div>
+          )}
+
+          {activePaymentTab === 'Bills' && (
+            <div style={{ background: '#FFF', border: '1px solid rgba(0,0,0,0.05)', borderRadius: '16px', padding: '2rem', marginBottom: '2rem' }}>
+              <h4 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.5rem', color: '#1A1A1A' }}>Bill Payments & Recharge</h4>
+              <p style={{ color: '#666', fontSize: '0.9rem', marginBottom: '1.5rem' }}>Pay your electricity bills, mobile recharge, DTH, and more.</p>
+              <button onClick={() => navigate('/bills')} style={{ background: '#DBA030', color: '#FFF', border: 'none', padding: '0.8rem 1.5rem', borderRadius: '8px', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem' }}>Pay a Bill</button>
+            </div>
+          )}
+
+          {activePaymentTab === 'Yono Cash' && (
+            <div style={{ background: '#FFF', border: '1px solid rgba(0,0,0,0.05)', borderRadius: '16px', padding: '2rem', marginBottom: '2rem' }}>
+              <h4 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.5rem', color: '#1A1A1A' }}>Yono Cash</h4>
+              <p style={{ color: '#666', fontSize: '0.9rem', marginBottom: '1.5rem' }}>Withdraw cash instantly from any Yono Cash point or ATM near you.</p>
+              <button onClick={() => navigate('/transfer')} style={{ background: '#DBA030', color: '#FFF', border: 'none', padding: '0.8rem 1.5rem', borderRadius: '8px', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem' }}>Generate Cash Code</button>
+            </div>
+          )}
+
+
+          {activePaymentTab === 'Yono Cash' && (
+            <div style={{ background: '#FFF', border: '1px solid rgba(0,0,0,0.05)', borderRadius: '16px', padding: '2rem', marginBottom: '2rem' }}>
+              <h4 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.5rem', color: '#1A1A1A' }}>Yono Cash</h4>
+              <p style={{ color: '#666', fontSize: '0.9rem', marginBottom: '1.5rem' }}>Withdraw cash from any Yono Cash point or ATM near you.</p>
+              <button onClick={() => navigate('/transfer')} style={{ background: '#DBA030', color: '#FFF', border: 'none', padding: '0.8rem 1.5rem', borderRadius: '8px', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem' }}>Generate Cash Code</button>
+            </div>
+          )}
+
+
+<div style={{ display: activePaymentTab === 'UPI' ? 'grid' : 'none', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', textAlign: 'center' }}>
             <div style={{ cursor: 'pointer' }} onClick={() => navigate('/transfer')}>
               <div style={{ background: '#FFF', width: '65px', height: '65px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 0.8rem', boxShadow: '0 4px 15px rgba(0,0,0,0.03)', border: '1px solid rgba(0,0,0,0.05)' }}><Smartphone size={28} color="#DBA030" /></div>
-              <p style={{ fontSize: '0.85rem', fontWeight: 600, color: '#555' }}>Pay to mobile or contact</p>
+              <p style={{ fontSize: '0.85rem', fontWeight: 600, color: '#555' }}>
+          {activePaymentTab === 'Fund Transfer' && (
+            <div style={{ background: '#FFF', border: '1px solid rgba(0,0,0,0.05)', borderRadius: '16px', padding: '2rem', marginBottom: '2rem' }}>
+              <h4 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.5rem', color: '#1A1A1A' }}>Transfer via Bank Account</h4>
+              <p style={{ color: '#666', fontSize: '0.9rem', marginBottom: '1.5rem' }}>Send money directly to any bank account using NEFT, RTGS, or IMPS.</p>
+              <button onClick={() => navigate('/transfer')} style={{ background: '#DBA030', color: '#FFF', border: 'none', padding: '0.8rem 1.5rem', borderRadius: '8px', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem' }}>Start Fund Transfer</button>
+            </div>
+          )}
+Pay to mobile or contact</p>
             </div>
             <div style={{ cursor: 'pointer' }} onClick={() => navigate('/transfer')}>
               <div style={{ background: '#FFF', width: '65px', height: '65px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 0.8rem', boxShadow: '0 4px 15px rgba(0,0,0,0.03)', border: '1px solid rgba(0,0,0,0.05)' }}><FileText size={28} color="#DBA030" /></div>
+
+          {activePaymentTab === 'Fund Transfer' && (
+            <div style={{ background: '#FFF', border: '1px solid rgba(0,0,0,0.05)', borderRadius: '16px', padding: '2rem', marginBottom: '2rem' }}>
+              <h4 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.5rem', color: '#1A1A1A' }}>Transfer via Bank Account</h4>
+              <p style={{ color: '#666', fontSize: '0.9rem', marginBottom: '1.5rem' }}>Send money directly to any bank account using NEFT, RTGS, or IMPS.</p>
+              <button onClick={() => navigate('/transfer')} style={{ background: '#DBA030', color: '#FFF', border: 'none', padding: '0.8rem 1.5rem', borderRadius: '8px', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem' }}>Start Fund Transfer</button>
+            </div>
+          )}
               <p style={{ fontSize: '0.85rem', fontWeight: 600, color: '#555' }}>Pay UPI ID or Number</p>
             </div>
             <div style={{ cursor: 'pointer' }} onClick={() => navigate('/transfer')}>
@@ -144,10 +195,35 @@ const Dashboard = () => {
               <p style={{ fontSize: '0.85rem', fontWeight: 600, color: '#555' }}>Pay to Bank A/C</p>
             </div>
             <div style={{ cursor: 'pointer' }} onClick={() => navigate('/transactions')}>
+
               <div style={{ background: '#FFF', width: '65px', height: '65px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 0.8rem', boxShadow: '0 4px 15px rgba(0,0,0,0.03)', border: '1px solid rgba(0,0,0,0.05)' }}><ArrowUpRight size={28} color="#DBA030" /></div>
+          {activePaymentTab === 'Fund Transfer' && (
+            <div style={{ background: '#FFF', border: '1px solid rgba(0,0,0,0.05)', borderRadius: '16px', padding: '2rem', marginBottom: '2rem' }}>
+              <h4 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.5rem', color: '#1A1A1A' }}>Transfer via Bank Account</h4>
+              <p style={{ color: '#666', fontSize: '0.9rem', marginBottom: '1.5rem' }}>Send money directly to any bank account using NEFT, RTGS, or IMPS.</p>
+              <button onClick={() => navigate('/transfer')} style={{ background: '#DBA030', color: '#FFF', border: 'none', padding: '0.8rem 1.5rem', borderRadius: '8px', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem' }}>Start Fund Transfer</button>
+            </div>
+          )}
+
               <p style={{ fontSize: '0.85rem', fontWeight: 600, color: '#555' }}>View Transactions</p>
             </div>
-          </div>
+          
+
+          {activePaymentTab === 'Fund Transfer' && (
+            <div style={{ background: '#FFF', border: '1px solid rgba(0,0,0,0.05)', borderRadius: '16px', padding: '2rem', marginBottom: '2rem' }}>
+              <h4 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.5rem', color: '#1A1A1A' }}>Transfer via Bank Account</h4>
+              <p style={{ color: '#666', fontSize: '0.9rem', marginBottom: '1.5rem' }}>Send money directly to any bank account using NEFT, RTGS, or IMPS.</p>
+              <button onClick={() => navigate('/transfer')} style={{ background: '#DBA030', color: '#FFF', border: 'none', padding: '0.8rem 1.5rem', borderRadius: '8px', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem' }}>Start Fund Transfer</button>
+            </div>
+          )}
+          {activePaymentTab === 'Fund Transfer' && (
+            <div style={{ background: '#FFF', border: '1px solid rgba(0,0,0,0.05)', borderRadius: '16px', padding: '2rem', marginBottom: '2rem' }}>
+              <h4 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.5rem', color: '#1A1A1A' }}>Transfer via Bank Account</h4>
+              <p style={{ color: '#666', fontSize: '0.9rem', marginBottom: '1.5rem' }}>Send money directly to any bank account using NEFT, RTGS, or IMPS.</p>
+              <button onClick={() => navigate('/transfer')} style={{ background: '#DBA030', color: '#FFF', border: 'none', padding: '0.8rem 1.5rem', borderRadius: '8px', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem' }}>Start Fund Transfer</button>
+            </div>
+          )}
+</div>
         </div>
 
         {/* PERSONAL FINANCE BANNER */}
