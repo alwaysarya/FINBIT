@@ -4,6 +4,7 @@ import api from '../services/api';
 import { AuthContext } from '../context/AuthContext';
 import { Landmark, Mail, Lock, CreditCard, QrCode, ShieldCheck, TrendingUp, IndianRupee, DollarSign, Euro, PoundSterling, Bitcoin } from 'lucide-react';
 import { motion } from 'framer-motion';
+import BankAnimation from '../components/BankAnimation';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -31,8 +32,10 @@ const Login = () => {
       <div style={{ position: 'absolute', left: '5%', bottom: '10%', width: '150px', height: '200px', backgroundImage: 'radial-gradient(#F2C879 2px, transparent 2px)', backgroundSize: '20px 20px', opacity: 0.6 }}></div>
       <div style={{ position: 'absolute', right: '5%', bottom: '10%', width: '150px', height: '200px', backgroundImage: 'radial-gradient(#F2C879 2px, transparent 2px)', backgroundSize: '20px 20px', opacity: 0.6 }}></div>
 
+      <BankAnimation />
       {/* ========================================= */}
       {/* BACKGROUND ELEMENTS (Perfectly Positioned) */}
+      <BankAnimation />
       {/* ========================================= */}
       
       {/* 1. Gold Credit Card - Top Left */}
@@ -46,9 +49,9 @@ const Login = () => {
           <span style={{ fontWeight: 800, letterSpacing: '1px', fontSize: '1.2rem' }}>FINBIT</span>
           <CreditCard size={32} />
         </div>
-        <div style={{ letterSpacing: '3px', fontSize: '1.3rem', fontWeight: 700, fontFamily: 'monospace' }}>**** **** **** 4589</div>
+        <div style={{ letterSpacing: '3px', fontSize: '1.3rem', fontWeight: 700, fontFamily: 'monospace' }}>**** **** **** 0000</div>
         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', fontWeight: 600, letterSpacing: '0.5px' }}>
-          <span>ARYAN THAKUR</span>
+          <span>JOHN DOE</span>
           <span>12/28</span>
         </div>
       </motion.div>
@@ -134,7 +137,7 @@ const Login = () => {
       {/* 8. Bitcoin Coin - Bottom Left */}
       <motion.div 
         className="bank-bg-visual"
-        style={{ bottom: '25%', left: '12%', background: '#F59E0B', color: 'white', width: '70px', height: '70px', borderRadius: '50%', boxShadow: '0 15px 30px -5px rgba(245, 158, 11, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 3 }}
+        style={{ bottom: '40%', left: '8%', background: '#F59E0B', color: 'white', width: '70px', height: '70px', borderRadius: '50%', boxShadow: '0 15px 30px -5px rgba(245, 158, 11, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 3 }}
         animate={{ y: [0, 10, 0] }}
         transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 2 }}
       >
@@ -167,8 +170,8 @@ const Login = () => {
           <Landmark size={32} color="#DBA030" /> FINBIT
         </div>
         <div className="bank-header-right">
-          <Link to="/register">Sign up</Link>
-          <a href="#" style={{ background: '#F9D989', padding: '0.7rem 1.5rem', borderRadius: '12px', fontWeight: 700 }}>Request Demo</a>
+          
+          <Link to="/register" style={{ background: "#F9D989", padding: "0.7rem 1.5rem", borderRadius: "12px", fontWeight: 700, textDecoration: "none", color: "#1A1A1A" }}>Request Demo</Link>
         </div>
       </div>
 
