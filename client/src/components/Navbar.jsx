@@ -62,11 +62,11 @@ const Navbar = () => {
             onMouseEnter={() => setActiveMenu(category)}
             onMouseLeave={() => setActiveMenu(null)}
           >
-            <span style={{ fontWeight: 600, color: '#1A1A1A', fontSize: '0.95rem' }}>{category}</span>
+            <span style={{ color: '#1A1A1A', fontWeight: 600, fontSize: '0.95rem', padding: '5px 12px', borderRadius: '8px', transition: 'all 0.2s' }}>{category}</span>
             {activeMenu === category && (
               <div style={{ position: 'absolute', top: '100%', left: '50%', transform: 'translateX(-50%)', background: '#FFF', border: '1px solid rgba(0,0,0,0.1)', borderRadius: '12px', padding: '10px', minWidth: '150px', boxShadow: '0 10px 25px rgba(0,0,0,0.1)', zIndex: 100 }}>
                 {menuConfig[category].map(item => (
-                  <Link key={item.name} to={item.path} style={{ display: 'block', padding: '8px 12px', color: '#333', textDecoration: 'none', borderRadius: '6px', fontSize: '0.9rem' }} onMouseOver={(e) => e.target.style.background = '#FCF9F2'} onMouseOut={(e) => e.target.style.background = 'transparent'}>{item.name}</Link>
+                  <Link key={item.name} to={item.path} className="dropdown-item">{item.name}</Link>
                 ))}
               </div>
             )}
