@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CreditCard, CheckCircle2, ArrowLeft, ChevronRight, User, Briefcase, MapPin, ChevronDown, Check, AlertCircle } from 'lucide-react';
+import { CreditCard, CheckCircle2, ArrowLeft, ChevronRight, User, Briefcase, MapPin, ChevronDown, Check, AlertCircle, Upload, FileText, DollarSign } from 'lucide-react';
 
 const CreditCardApply = () => {
   const navigate = useNavigate();
@@ -13,10 +13,16 @@ const CreditCardApply = () => {
     fullName: '', dob: '', mobile: '', email: '', pan: '',
     employmentType: 'Salaried', monthlyIncome: '', annualIncome: '', existingEmi: '',
     address: '', city: '', state: '', pin: '',
-    cardType: 'Platinum', consent: false
+    cardType: 'Platinum', consent: false,
+    documents: { panCard: null, salarySlip: null, bankStatement: null }
   });
 
   const [appId, setAppId] = useState('');
+
+  const updateForm = (field, value) => {
+    setForm(prev => ({ ...prev, [field]: value }));
+    if (errorMsg) setErrorMsg('');
+  };
 
   const handleNext = () => {
     setErrorMsg('');
@@ -54,12 +60,6 @@ const CreditCardApply = () => {
     setStep(5);
   };
 
-  // Yahan onChange me setErrorMsg('') add kar diya gaya hai
-  const updateForm = (field, value) => {
-    setForm(prev => ({ ...prev, [field]: value }));
-    if (errorMsg) setErrorMsg('');
-  };
-
   const inputStyle = { width: '100%', padding: '1rem', borderRadius: '12px', border: '1px solid #E5E5E5', background: '#F9F9F9', color: '#1A1A1A', fontSize: '1rem', outline: 'none', marginBottom: '1rem' };
   const labelStyle = { fontSize: '0.9rem', color: '#666', fontWeight: 600, marginBottom: '0.5rem', display: 'block' };
 
@@ -87,6 +87,7 @@ const CreditCardApply = () => {
 
         <AnimatePresence mode="wait">
           
+          {/* STEP 1: PERSONAL DETAILS */}
           {step === 1 && (
             <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} style={{ background: '#FFF', padding: '2.5rem', borderRadius: '24px', border: '1px solid rgba(0,0,0,0.05)', marginTop: '2rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.5rem' }}>
@@ -110,6 +111,7 @@ const CreditCardApply = () => {
             </motion.div>
           )}
 
+          {/* STEP 2: EMPLOYMENT & INCOME */}
           {step === 2 && (
             <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} style={{ background: '#FFF', padding: '2.5rem', borderRadius: '24px', border: '1px solid rgba(0,0,0,0.05)', marginTop: '2rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.5rem' }}>
@@ -152,6 +154,7 @@ const CreditCardApply = () => {
             </motion.div>
           )}
 
+          {/* STEP 3: ADDRESS DETAILS */}
           {step === 3 && (
             <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} style={{ background: '#FFF', padding: '2.5rem', borderRadius: '24px', border: '1px solid rgba(0,0,0,0.05)', marginTop: '2rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.5rem' }}>
@@ -174,13 +177,16 @@ const CreditCardApply = () => {
             </motion.div>
           )}
 
+          {/* STEP 4: CARD SELECTION, DOCUMENTS & CONSENT */}
           {step === 4 && (
             <motion.div key="step4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} style={{ background: '#FFF', padding: '2.5rem', borderRadius: '24px', border: '1px solid rgba(0,0,0,0.05)', marginTop: '2rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.5rem' }}>
                 <div style={{ background: '#F2C879', padding: '10px', borderRadius: '50%' }}><CreditCard size={20} color="#1A1A1A" /></div>
-                <h3 style={{ fontSize: '1.2rem', fontWeight: 700 }}>Select Card & Consent</h3>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 700 }}>Select Card, Documents & Consent</h3>
               </div>
               <ErrorBanner />
+
+              <label style={labelStyle}>Choose Your Card</label>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
                 {['Classic', 'Platinum', 'Signature'].map(card => (
                   <div key={card} onClick={() => updateForm('cardType', card)} style={{ padding: '1.5rem 1rem', borderRadius: '16px', border: form.cardType === card ? '2px solid #DBA030' : '1px solid #E5E5E5', background: form.cardType === card ? '#FCF9F2' : '#FFF', cursor: 'pointer', textAlign: 'center' }}>
@@ -189,10 +195,30 @@ const CreditCardApply = () => {
                   </div>
                 ))}
               </div>
+
+              <label style={labelStyle}>Upload Documents (Optional)</label>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
+                {[
+                  { key: 'panCard', label: 'PAN Card' },
+                  { key: 'salarySlip', label: 'Salary Slip' },
+                  { key: 'bankStatement', label: 'Bank Statement' },
+                ].map(doc => (
+                  <div key={doc.key} onClick={() => document.getElementById('file-' + doc.key).click()} style={{ padding: '1rem', borderRadius: '12px', border: form.documents[doc.key] ? '2px solid #10B981' : '2px dashed #E5E5E5', background: form.documents[doc.key] ? '#ECFDF5' : '#FAFAFA', textAlign: 'center', cursor: 'pointer', transition: 'all 0.2s' }}>
+                    <Upload size={24} color={form.documents[doc.key] ? '#10B981' : '#888'} style={{ margin: '0 auto 0.5rem' }} />
+                    <p style={{ fontSize: '0.8rem', fontWeight: 600, color: form.documents[doc.key] ? '#10B981' : '#666' }}>{form.documents[doc.key] ? form.documents[doc.key].name : doc.label}</p>
+                    <input id={'file-' + doc.key} type="file" style={{ display: 'none' }} onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) setForm(prev => ({ ...prev, documents: { ...prev.documents, [doc.key]: file } }));
+                    }} />
+                  </div>
+                ))}
+              </div>
+
               <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', cursor: 'pointer', marginBottom: '2rem' }}>
                 <input type="checkbox" checked={form.consent} onChange={e => updateForm('consent', e.target.checked)} style={{ marginTop: '5px' }} />
                 <span style={{ fontSize: '0.85rem', color: '#666', lineHeight: 1.5 }}>I confirm that the information provided is accurate. I authorize FINBIT to verify my identity and documents, and consent to applicable credit bureau checks as per the privacy policy.</span>
               </label>
+
               <div style={{ display: 'flex', gap: '1rem' }}>
                 <button onClick={handleBack} style={{ background: '#F9F9F9', color: '#1A1A1A', border: '1px solid #E5E5E5', padding: '1.2rem', borderRadius: '16px', fontWeight: 700, fontSize: '1.1rem', cursor: 'pointer', flex: 1 }}>Back</button>
                 <button onClick={handleSubmit} style={{ background: '#DBA030', color: '#FFF', border: 'none', padding: '1.2rem', borderRadius: '16px', fontWeight: 700, fontSize: '1.1rem', cursor: 'pointer', flex: 2 }}>Submit Application</button>
@@ -200,6 +226,7 @@ const CreditCardApply = () => {
             </motion.div>
           )}
 
+          {/* STEP 5: SUCCESS SCREEN */}
           {step === 5 && (
             <motion.div key="step5" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} style={{ background: '#FFF', padding: '3rem', borderRadius: '24px', border: '1px solid rgba(0,0,0,0.05)', textAlign: 'center', marginTop: '2rem' }}>
               <div style={{ background: '#ECFDF5', width: '80px', height: '80px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
