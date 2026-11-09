@@ -72,20 +72,20 @@ const Dashboard = () => {
         {/* HERO CARDS */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '2.5rem' }}>
           {/* Transaction Card */}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ background: 'linear-gradient(135deg, #DBA030 0%, #F2C879 100%)', padding: '2rem', borderRadius: '24px', color: '#FFF', position: 'relative', overflow: 'hidden', boxShadow: '0 20px 40px rgba(219, 160, 48, 0.2)' }}>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ background: 'linear-gradient(135deg, #DBA030 0%, #F2C879 100%)', padding: '2rem', borderRadius: '24px', color: '#1A1A1A', position: 'relative', overflow: 'hidden', boxShadow: '0 20px 40px rgba(219, 160, 48, 0.2)' }}>
             <div style={{ position: 'absolute', top: '-20%', right: '-10%', opacity: 0.2, transform: 'rotate(15deg)' }}>
               <CreditCard size={180} color="#FFF" />
             </div>
             <div style={{ position: 'relative', zIndex: 1 }}>
-              <p style={{ fontSize: '0.9rem', fontWeight: 600, opacity: 0.9 }}>TRANSACTION ACCOUNTS (01)</p>
-              <p style={{ fontSize: '1rem', marginTop: '1rem', opacity: 0.9 }}>Combined Balance</p>
+              <p style={{ fontSize: '0.9rem', fontWeight: 600, opacity: 0.9 }}>ACCOUNTS (01)</p>
+              <p style={{ fontSize: '1rem', marginTop: '1rem', opacity: 0.9 }}>Balance</p>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <h2 style={{ fontSize: '2.8rem', fontWeight: 800, letterSpacing: '-0.03em' }}>₹ {user.account?.balance?.toLocaleString()}</h2>
                 <RefreshCw size={20} style={{ cursor: 'pointer', opacity: 0.8 }} />
               </div>
               <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
-                <button onClick={() => navigate('/transactions')} style={{ background: 'rgba(255,255,255,0.2)', border: 'none', padding: '0.8rem 1.5rem', borderRadius: '8px', color: '#FFF', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem' }}>View Accounts</button>
-                <button onClick={() => navigate('/transactions')} style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.5)', padding: '0.8rem 1.5rem', borderRadius: '8px', color: '#FFF', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem' }}>Transactions</button>
+                <button onClick={() => navigate('/transactions')} style={{ background: 'rgba(255,255,255,0.2)', border: 'none', padding: '0.8rem 1.5rem', borderRadius: '8px', color: '#1A1A1A', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem' }}>View Accounts</button>
+                <button onClick={() => navigate('/transactions')} style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.5)', padding: '0.8rem 1.5rem', borderRadius: '8px', color: '#1A1A1A', fontWeight: 600, cursor: 'pointer', fontSize: '0.9rem' }}>Transactions</button>
               </div>
             </div>
           </motion.div>
