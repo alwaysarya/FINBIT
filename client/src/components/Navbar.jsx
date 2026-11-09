@@ -23,7 +23,7 @@ const Navbar = () => {
 
   const menuConfig = {
     Accounts: [
-      { name: 'Dashboard', path: '/dashboard' },
+      { name: 'Home', path: '/home' },
       { name: 'History', path: '/transactions' },
     ],
     Payments: [
