@@ -5,33 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FINBIT Admin Panel</title>
     <style>
-      body { background: #0f172a; color: white; font-family: sans-serif; margin: 0; padding: 2rem; }
-      .admin-container { max-width: 1200px; margin: 0 auto; }
-      .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 1px solid #334155; padding-bottom: 1rem; }
+      body { background: #0A0A0A; color: white; font-family: 'Inter', sans-serif; margin: 0; padding: 2rem; }
+      .container { max-width: 1200px; margin: 0 auto; }
+      .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 1px solid #2A2A2A; padding-bottom: 1rem; }
       .tabs { display: flex; gap: 1rem; margin-bottom: 2rem; }
-      .tab-btn { background: #1e293b; color: white; border: 1px solid #334155; padding: 0.8rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 600; }
-      .tab-btn.active { background: #6366f1; border-color: #6366f1; }
-      .admin-table { width: 100%; border-collapse: collapse; background: #1e293b; border-radius: 12px; overflow: hidden; }
-      .admin-table th, .admin-table td { padding: 1rem; text-align: left; border-bottom: 1px solid #334155; }
-      .admin-table th { background: #0f172a; color: #94a3b8; }
-      .btn { padding: 0.5rem 1rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.85rem; }
-      .btn-freeze { background: #ef4444; color: white; }
-      .btn-unfreeze { background: #10b981; color: white; }
-      .btn-reply { background: #6366f1; color: white; }
-      textarea { width: 100%; padding: 0.5rem; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: white; margin-bottom: 0.5rem; }
+      .tab { background: #141414; color: #A1A1AA; border: 1px solid #2A2A2A; padding: 0.7rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 500; }
+      .tab.active { background: #4F46E5; color: white; border-color: #4F46E5; }
+      table { width: 100%; border-collapse: collapse; background: #141414; border-radius: 12px; overflow: hidden; border: 1px solid #2A2A2A; }
+      th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #2A2A2A; font-size: 0.9rem; }
+      th { background: #0A0A0A; color: #A1A1AA; font-weight: 500; }
+      .btn { padding: 0.4rem 0.8rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 0.85rem; }
+      .btn-red { background: #EF4444; color: white; }
+      .btn-green { background: #10B981; color: white; }
+      .btn-blue { background: #4F46E5; color: white; }
+      textarea { width: 100%; padding: 0.5rem; background: #0A0A0A; border: 1px solid #2A2A2A; border-radius: 6px; color: white; margin-bottom: 0.5rem; }
+      .ticket-card { background: #141414; padding: 1.5rem; border-radius: 12px; border: 1px solid #2A2A2A; margin-bottom: 1rem; }
     </style>
   </head>
   <body>
-    <div class="admin-container">
-      <div class="admin-header">
-        <h1>🏦 FINBIT Admin Panel</h1>
+    <div class="container">
+      <div class="header">
+        <h1>FINBIT Admin</h1>
         <div id="admin-info">Checking...</div>
       </div>
 
       <div class="tabs" id="tabs" style="display: none;">
-        <button class="tab-btn active" onclick="switchTab('users', event)">👥 Users</button>
-        <button class="tab-btn" onclick="switchTab('tickets', event)">🎫 Support Tickets</button>
-        <button class="tab-btn" onclick="switchTab('loans', event)">💰 Loans</button>
+        <button class="tab active" onclick="switchTab('users', event)">Users</button>
+        <button class="tab" onclick="switchTab('tickets', event)">Tickets</button>
+        <button class="tab" onclick="switchTab('loans', event)">Loans</button>
       </div>
 
       <div id="content"></div>

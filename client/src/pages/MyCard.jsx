@@ -3,6 +3,7 @@ import api from '../services/api';
 import { AuthContext } from '../context/AuthContext';
 import Toast from '../components/Toast';
 import { motion } from 'framer-motion';
+import { CreditCard, Lock, Unlock } from 'lucide-react';
 
 const MyCard = () => {
   const { user } = useContext(AuthContext);
@@ -29,7 +30,7 @@ const MyCard = () => {
     <motion.div className="page" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
       <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: '', type: 'success' })} />
       
-      <h1>💳 My Debit Card</h1>
+      <h1 style={{ display: 'flex', alignItems: 'center', gap: '10px' }}><CreditCard size={28} /> My Debit Card</h1>
 
       <motion.div 
         className={`virtual-card ${card.isFrozen ? 'frozen' : ''}`}
@@ -38,7 +39,7 @@ const MyCard = () => {
         transition={{ duration: 0.8, type: 'spring' }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={{ fontSize: '1.5rem' }}>💳</span>
+          <CreditCard size={32} color="#A1A1AA" />
           <span style={{ fontWeight: 600, fontSize: '1.1rem', fontStyle: 'italic' }}>{card.cardType}</span>
         </div>
         <div className="card-number">{card.cardNumber}</div>
@@ -53,9 +54,9 @@ const MyCard = () => {
         <motion.button 
           onClick={handleFreeze} 
           whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-          style={{ background: card.isFrozen ? 'var(--success)' : 'var(--danger)', padding: '0.8rem 2rem' }}
+          style={{ background: card.isFrozen ? 'var(--success)' : 'var(--danger)', padding: '0.8rem 2rem', display: 'flex', alignItems: 'center', gap: '8px' }}
         >
-          {card.isFrozen ? '🔓 Unfreeze Card' : '🔒 Freeze Card'}
+          {card.isFrozen ? <><Unlock size={18} /> Unfreeze Card</> : <><Lock size={18} /> Freeze Card</>}
         </motion.button>
         <p style={{ color: 'var(--text-secondary)', marginTop: '1rem', fontSize: '0.9rem' }}>
           {card.isFrozen ? 'Your card is temporarily blocked.' : 'Your card is active and ready to use.'}

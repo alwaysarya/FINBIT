@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import api from '../services/api';
 import { AuthContext } from '../context/AuthContext';
 import Toast from '../components/Toast';
+import { Settings as SettingsIcon, Shield, Bell, Sun, Moon } from 'lucide-react';
 
 const Settings = () => {
   const { theme, toggleTheme } = useContext(AuthContext);
@@ -36,37 +37,44 @@ const Settings = () => {
     <div className="page">
       <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: '', type: 'success' })} />
       
-      <h1>⚙️ Account Settings</h1>
+      <h1 style={{ display: 'flex', alignItems: 'center', gap: '10px' }}><SettingsIcon size={28} /> Settings</h1>
 
       <div className="settings-card">
         <div className="setting-row">
-          <div><h3>Push Notifications</h3><p>Receive alerts for transactions and login attempts.</p></div>
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            <Bell size={20} color="var(--text-secondary)" />
+            <div><h3 style={{ color: 'white' }}>Push Notifications</h3><p style={{ fontSize: '0.85rem' }}>Receive alerts for transactions and login attempts.</p></div>
+          </div>
           <label className="switch"><input type="checkbox" checked={settings.notifications} onChange={(e) => handleSave('notifications', e.target.checked)} /><span className="slider"></span></label>
         </div>
 
         <div className="setting-row">
-          <div><h3>Appearance (Theme)</h3><p>Switch between light and dark mode.</p></div>
-          <button onClick={toggleTheme} className="edit-btn">{theme === 'dark' ? '☀️ Light' : '🌙 Dark'}</button>
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            {theme === 'dark' ? <Moon size={20} color="var(--text-secondary)" /> : <Sun size={20} color="var(--text-secondary)" />}
+            <div><h3 style={{ color: 'white' }}>Theme</h3><p style={{ fontSize: '0.85rem' }}>Switch between light and dark mode.</p></div>
+          </div>
+          <button onClick={toggleTheme} className="edit-btn">{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</button>
         </div>
 
         <div className="setting-row">
-          <div><h3>Two-Factor Authentication (2FA)</h3><p>Add an extra layer of security to your account.</p></div>
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            <Shield size={20} color="var(--text-secondary)" />
+            <div><h3 style={{ color: 'white' }}>Two-Factor Auth</h3><p style={{ fontSize: '0.85rem' }}>Add an extra layer of security.</p></div>
+          </div>
           <label className="switch"><input type="checkbox" checked={settings.twoFactor} onChange={(e) => handleSave('twoFactor', e.target.checked)} /><span className="slider"></span></label>
         </div>
       </div>
 
-      <h2 style={{ marginTop: '3rem' }}>🛡️ Login History</h2>
+      <h2 style={{ marginTop: '3rem', marginBottom: '1rem' }}>Login History</h2>
       <div className="txn-list">
         {history.length === 0 ? <p>No login history found.</p> : history.map(h => (
           <div key={h._id} className="txn-item">
-            <div className="txn-icon">💻</div>
+            <div className="txn-icon"><Shield size={18} /></div>
             <div className="txn-details">
               <p className="txn-type">{getBrowserName(h.device)}</p>
               <p className="txn-date">{new Date(h.createdAt).toLocaleString()}</p>
             </div>
-            <span className={`txn-amount ${h.status === 'success' ? 'text-green' : 'text-red'}`}>
-              {h.status.toUpperCase()}
-            </span>
+            <span className={`txn-amount ${h.status === 'success' ? 'text-green' : 'text-red'}`}>{h.status.toUpperCase()}</span>
           </div>
         ))}
       </div>

@@ -3,6 +3,7 @@ import api from '../services/api';
 import { AuthContext } from '../context/AuthContext';
 import Toast from '../components/Toast';
 import { motion } from 'framer-motion';
+import { Landmark, Calculator, CheckCircle2 } from 'lucide-react';
 
 const Loans = () => {
   const { user, updateBalance } = useContext(AuthContext);
@@ -39,7 +40,7 @@ const Loans = () => {
     <motion.div className="page" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
       <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: '', type: 'success' })} />
       
-      <h1>🏦 Loans & EMI</h1>
+      <h1 style={{ display: 'flex', alignItems: 'center', gap: '10px' }}><Landmark size={28} /> Loans & EMI</h1>
 
       <motion.div className="form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} style={{ marginBottom: '3rem' }}>
         <h3>Apply for a Loan</h3>
@@ -64,28 +65,32 @@ const Loans = () => {
           <input type="number" value={form.tenureMonths} onChange={(e) => setForm({ ...form, tenureMonths: e.target.value })} required />
         </div>
 
-        <motion.button type="button" onClick={handleCalculate} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} style={{ background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', marginBottom: '1rem' }}>Calculate EMI</motion.button>
+        <motion.button type="button" onClick={handleCalculate} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-color)', marginBottom: '1rem' }}>
+          <Calculator size={18} /> Calculate EMI
+        </motion.button>
 
         {emiData && (
-          <motion.div className="card" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} style={{ background: 'var(--glass-bg)', marginBottom: '1rem' }}>
-            <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Your Monthly EMI</p>
+          <motion.div className="card" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} style={{ background: 'var(--bg-surface)', marginBottom: '1rem' }}>
+            <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Monthly EMI</p>
             <h2 style={{ color: 'var(--success)', fontSize: '2.5rem' }}>₹{emiData.emi}</h2>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Total Payable: ₹{emiData.totalPayable} at {emiData.interestRate}% p.a.</p>
           </motion.div>
         )}
 
-        <motion.button onClick={handleApply} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} style={{ background: 'var(--accent-primary)' }}>Apply & Get Money</motion.button>
+        <motion.button onClick={handleApply} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} style={{ background: 'var(--accent-primary)' }}>
+          <CheckCircle2 size={18} /> Apply & Get Money
+        </motion.button>
       </motion.div>
 
       <h2>My Active Loans</h2>
       {loans.length === 0 ? <p>No loans taken yet.</p> : (
         <motion.div className="txn-list" initial="hidden" animate="show" variants={{ hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.1 } } }}>
           {loans.map(l => (
-            <motion.div key={l._id} className="txn-item" variants={{ hidden: { opacity: 0, x: -20 }, show: { opacity: 1, x: 0 } }} style={{ borderLeft: '4px solid var(--success)' }}>
+            <motion.div key={l._id} className="txn-item" variants={{ hidden: { opacity: 0, x: -20 }, show: { opacity: 1, x: 0 } }}>
+              <div className="txn-icon"><Landmark size={18} /></div>
               <div className="txn-details">
                 <p className="txn-type" style={{ textTransform: 'capitalize' }}>{l.loanType} Loan</p>
                 <p className="txn-date">EMI: ₹{l.emi}/month • {l.tenureMonths} Months</p>
-                <p className="txn-desc">Amount: ₹{l.amount} • Rate: {l.interestRate}%</p>
               </div>
               <div className="txn-amount text-green">₹{l.amount}</div>
             </motion.div>

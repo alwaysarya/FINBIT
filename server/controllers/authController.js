@@ -1,25 +1,43 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const Account = require('../models/Account');
-const LoginHistory = require('../models/LoginHistory'); // <-- Naya import
+const LoginHistory = require('../models/LoginHistory');
 const generateToken = require('../utils/generateToken');
 
 const generateAccountNumber = () => Math.floor(1000000000 + Math.random() * 9000000000).toString();
+const generateReferralCode = (name) => name.slice(0, 3).toUpperCase() + Math.floor(1000 + Math.random() * 9000);
 
 const registerUser = async (req, res, next) => {
   try {
-    const { name, email, password, phone } = req.body;
+    const { name, email, password, phone, referralCode } = req.body;
     if (!name || !email || !password) { res.status(400); throw new Error('Please provide details'); }
     const userExists = await User.findOne({ email });
     if (userExists) { res.status(400); throw new Error('User already exists'); }
 
+    let referrer = null;
+    if (referralCode) {
+      referrer = await User.findOne({ referralCode: referralCode.toUpperCase() });
+      if (!referrer) { res.status(400); throw new Error('Invalid referral code'); }
+    }
+
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    const user = await User.create({ name, email, password: hashedPassword, phone: phone || '' });
+    const user = await User.create({ 
+      name, email, password: hashedPassword, phone: phone || '', 
+      referralCode: generateReferralCode(name), referredBy: referrer ? referrer._id : null 
+    });
 
     const account = await Account.create({ user: user._id, accountNumber: generateAccountNumber(), balance: 10000, accountType: 'savings' });
+
+    if (referrer) {
+      account.balance += 100;
+      await account.save();
+      const referrerAccount = await Account.findOne({ user: referrer._id });
+      if (referrerAccount) { referrerAccount.balance += 100; await referrerAccount.save(); }
+    }
+
     res.status(201).json({
-      _id: user._id, name: user.name, email: user.email, phone: user.phone, role: user.role,
+      _id: user._id, name: user.name, email: user.email, phone: user.phone, role: user.role, referralCode: user.referralCode,
       account: { _id: account._id, accountNumber: account.accountNumber, balance: account.balance, accountType: account.accountType },
       token: generateToken(user._id),
     });
@@ -32,22 +50,16 @@ const loginUser = async (req, res, next) => {
     if (!email || !password) { res.status(400); throw new Error('Please provide details'); }
     const user = await User.findOne({ email });
     if (!user) { res.status(401); throw new Error('Invalid credentials'); }
-    
+
     const isMatch = await bcrypt.compare(password, user.password);
-    
-    // LOGIN HISTORY SAVE KARO
-    await LoginHistory.create({
-      user: user._id,
-      device: req.headers['user-agent'] || 'Web Browser', // Browser info
-      status: isMatch ? 'success' : 'failed',
-    });
+    await LoginHistory.create({ user: user._id, device: req.headers['user-agent'] || 'Web Browser', status: isMatch ? 'success' : 'failed' });
 
     if (!isMatch) { res.status(401); throw new Error('Invalid credentials'); }
 
     const account = await Account.findOne({ user: user._id });
 
     res.json({
-      _id: user._id, name: user.name, email: user.email, phone: user.phone, role: user.role,
+      _id: user._id, name: user.name, email: user.email, phone: user.phone, role: user.role, referralCode: user.referralCode,
       account: account ? { _id: account._id, accountNumber: account.accountNumber, balance: account.balance, accountType: account.accountType } : null,
       token: generateToken(user._id),
     });
@@ -85,9 +97,6 @@ const changePassword = async (req, res, next) => {
   } catch (error) { next(error); }
 };
 
-module.exports = { registerUser, loginUser, getMe, updateProfile, changePassword };
-
-// Direct Reset Password (OTP verify ke baad)
 const resetPasswordDirect = async (req, res, next) => {
   try {
     const { email, newPassword } = req.body;
@@ -100,4 +109,4 @@ const resetPasswordDirect = async (req, res, next) => {
   } catch (error) { next(error); }
 };
 
-module.exports.resetPasswordDirect = resetPasswordDirect;
+module.exports = { registerUser, loginUser, getMe, updateProfile, changePassword, resetPasswordDirect };

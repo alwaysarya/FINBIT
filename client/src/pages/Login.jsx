@@ -2,7 +2,7 @@ import { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { AuthContext } from '../context/AuthContext';
-import { Landmark, LogIn } from 'lucide-react';
+import { Landmark, LogIn, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Login = () => {
@@ -27,6 +27,9 @@ const Login = () => {
   return (
     <div className="auth-container">
       <motion.div className="auth-box" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+        <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', color: 'var(--text-secondary)', textDecoration: 'none', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
+          <ArrowLeft size={16} /> Back to Home
+        </Link>
         <h1><Landmark size={28} color="var(--accent-primary)" /> FINBIT</h1>
         <h2>Sign in to your account</h2>
         {error && <p style={{ color: 'var(--danger)', marginBottom: '1rem', fontSize: '0.9rem' }}>{error}</p>}
