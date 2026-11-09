@@ -20,6 +20,7 @@ const Dashboard = () => {
   const [stats, setStats] = useState({ income: 0, expense: 0 });
   const [activeTab, setActiveTab] = useState('Banking');
   const [searchQuery, setSearchQuery] = useState('');
+  const [activePaymentTab, setActivePaymentTab] = useState('UPI');
 
   const pieData = [
     { name: 'Food', value: 4000 },
@@ -117,7 +118,7 @@ const Dashboard = () => {
           <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '1.5rem' }}>Payments & Transfers</h3>
           <div style={{ display: 'flex', gap: '2rem', marginBottom: '1.5rem', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
             {['UPI', 'Fund Transfer', 'Bills', 'Yono Cash'].map((tab, i) => (
-               <p key={tab} style={{ paddingBottom: '0.8rem', color: i === 0 ? '#1A1A1A' : '#888', fontWeight: i === 0 ? 700 : 500, borderBottom: i === 0 ? '2px solid #DBA030' : 'none', fontSize: '0.95rem' }}>{tab}</p>
+               <p key={tab} onClick={() => setActivePaymentTab(tab)} style={{ paddingBottom: '0.8rem', color: activePaymentTab === tab ? '#1A1A1A' : '#888', fontWeight: activePaymentTab === tab ? 700 : 500, borderBottom: activePaymentTab === tab ? '2px solid #DBA030' : 'none', fontSize: '0.95rem', cursor: 'pointer' }}>{tab}</p>
             ))}
           </div>
 
