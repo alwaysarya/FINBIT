@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { AuthContext } from '../context/AuthContext';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ArrowDownLeft, ArrowUpRight, Search, Download, FileText } from 'lucide-react';
+import { ArrowLeft, ArrowDownLeft, ArrowUpRight, Search, Download, FileText, FileDown } from 'lucide-react';
+import html2pdf from 'html2pdf.js';
 
 const Transactions = () => {
   const navigate = useNavigate();
@@ -51,6 +52,114 @@ const Transactions = () => {
     const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'finbit_statement.csv'; link.click();
   };
 
+  const downloadPDF = async () => {
+    if (filteredTxns.length === 0) return;
+    
+    let freshUser = user;
+    try {
+      const res = await api.get('/auth/me');
+      freshUser = { ...user, ...res.data.user, account: res.data.account };
+    } catch (err) { console.log('Fetch error:', err); }
+
+    const invoiceNo = 'FIN-' + Date.now().toString().slice(-8);
+    const today = new Date().toLocaleString();
+    const totalCredit = filteredTxns.filter(t => isCredit(t)).reduce((a, b) => a + b.amount, 0);
+    const totalDebit = filteredTxns.filter(t => !isCredit(t)).reduce((a, b) => a + b.amount, 0);
+
+    const html = `
+      <div style="padding: 40px; font-family: Helvetica, Arial, sans-serif; color: #1A1A1A; max-width: 800px; margin: 0 auto;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 3px solid #DBA030; padding-bottom: 20px; margin-bottom: 25px;">
+          <div>
+            <h1 style="margin: 0; color: #DBA030; font-size: 42px; font-weight: 900;">FINBIT</h1>
+            <p style="margin: 3px 0 0 0; color: #666; font-size: 11px; letter-spacing: 2px;">DIGITAL BANKING PLATFORM</p>
+          </div>
+          <div style="text-align: right; font-size: 12px; color: #555; line-height: 1.6;">
+            <p style="margin: 0;"><strong>FINBIT Technologies Pvt. Ltd.</strong></p>
+            <p style="margin: 0;">27, Dr Rajkumar Rd, Milk Colony, Subramanyanagar, 2nd Stage</p>
+            <p style="margin: 0;">Malleshwaram / Rajajinagar, Bengaluru, Karnataka 560055</p>
+            <p style="margin: 0;">support@finbit.com</p>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <h2 style="margin: 0; font-size: 22px; color: #1A1A1A;">ACCOUNT STATEMENT</h2>
+          <p style="margin: 3px 0 0 0; font-size: 12px; color: #888;">Original for Customer</p>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; margin-bottom: 25px;">
+          <div style="width: 55%; font-size: 12px; line-height: 1.7;">
+            <p style="margin: 0; font-weight: bold; font-size: 11px; color: #888;">ACCOUNT HOLDER</p>
+            <p style="margin: 5px 0 0 0; font-weight: bold; font-size: 14px;">${freshUser.name || 'N/A'}</p>
+            <p style="margin: 2px 0 0 0;">Email: ${freshUser.email || 'N/A'}</p>
+            <p style="margin: 2px 0 0 0;">Phone: ${freshUser.phone || 'N/A'}</p>
+            <p style="margin: 2px 0 0 0;">Account No: ${freshUser.account?.accountNumber || 'N/A'}</p>
+            <p style="margin: 2px 0 0 0;">Account Type: ${(freshUser.account?.accountType || 'savings').toUpperCase()}</p>
+          </div>
+          <div style="width: 40%; font-size: 12px; line-height: 1.7;">
+            <p style="margin: 0; font-weight: bold; font-size: 11px; color: #888;">STATEMENT DETAILS</p>
+            <div style="display: flex; justify-content: space-between; margin-top: 5px;"><span>Statement No:</span><span style="font-weight: bold;">${invoiceNo}</span></div>
+            <div style="display: flex; justify-content: space-between; margin-top: 3px;"><span>Date:</span><span style="font-weight: bold;">${today}</span></div>
+            <div style="display: flex; justify-content: space-between; margin-top: 3px;"><span>Total Transactions:</span><span style="font-weight: bold;">${filteredTxns.length}</span></div>
+          </div>
+        </div>
+
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+          <thead>
+            <tr style="background: #1A1A1A; color: white;">
+              <th style="padding: 12px 10px; text-align: left; font-size: 10px;">S.No</th>
+              <th style="padding: 12px 10px; text-align: left; font-size: 10px;">Date</th>
+              <th style="padding: 12px 10px; text-align: left; font-size: 10px;">Description</th>
+              <th style="padding: 12px 10px; text-align: left; font-size: 10px;">Mode</th>
+              <th style="padding: 12px 10px; text-align: right; font-size: 10px;">Debit</th>
+              <th style="padding: 12px 10px; text-align: right; font-size: 10px;">Credit</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${filteredTxns.map((t, i) => `
+              <tr style="border-bottom: 1px solid #E5E5E5; background: ${i % 2 === 0 ? '#FFF' : '#FAFAFA'};">
+                <td style="padding: 10px; font-size: 12px;">${i + 1}</td>
+                <td style="padding: 10px; font-size: 12px;">${new Date(t.createdAt).toLocaleDateString()}</td>
+                <td style="padding: 10px; font-size: 12px;">${t.description || 'Transfer'}</td>
+                <td style="padding: 10px; font-size: 12px;">${t.mode || 'Internal'}</td>
+                <td style="padding: 10px; font-size: 12px; text-align: right; color: #EF4444; font-weight: 600;">${!isCredit(t) ? t.amount.toFixed(2) : '-'}</td>
+                <td style="padding: 10px; font-size: 12px; text-align: right; color: #10B981; font-weight: 600;">${isCredit(t) ? t.amount.toFixed(2) : '-'}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+
+        <div style="display: flex; justify-content: flex-end; margin-bottom: 25px;">
+          <div style="width: 45%; font-size: 12px;">
+            <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #E5E5E5;"><span>Total Debits:</span><span style="font-weight: bold; color: #EF4444;">₹ ${totalDebit.toFixed(2)}</span></div>
+            <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #E5E5E5;"><span>Total Credits:</span><span style="font-weight: bold; color: #10B981;">₹ ${totalCredit.toFixed(2)}</span></div>
+            <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 2px solid #1A1A1A;"><span style="font-weight: bold;">Current Balance:</span><span style="font-weight: bold;">₹ ${(freshUser.account?.balance || 0).toFixed(2)}</span></div>
+          </div>
+        </div>
+
+        <div style="margin-top: 40px; padding-top: 15px; border-top: 1px solid #E5E5E5; display: flex; justify-content: space-between;">
+          <div style="font-size: 10px; color: #888;">
+            <p style="margin: 0;"><strong>Terms & Conditions:</strong></p>
+            <p style="margin: 2px 0 0 0;">Computer-generated statement. No signature required.</p>
+            <p style="margin: 2px 0 0 0;">Subject to Bengaluru jurisdiction.</p>
+          </div>
+          <div style="text-align: center; font-size: 10px; color: #888;">
+            <p style="margin: 0; color: #DBA030; font-weight: bold;">For FINBIT Technologies Pvt. Ltd.</p>
+            <div style="height: 30px;"></div>
+            <p style="margin: 0; border-top: 1px solid #1A1A1A; padding-top: 3px;">Authorized Signatory</p>
+          </div>
+        </div>
+      </div>
+    `;
+
+    html2pdf().from(html).set({
+      margin: 0,
+      filename: `FINBIT_Statement_${invoiceNo}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    }).save();
+  };
+
   if (loading) return <div style={{ minHeight: '100vh', background: '#FCF9F2', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#666' }}>Loading...</div>;
 
   return (
@@ -65,9 +174,14 @@ const Transactions = () => {
           <h1 style={{ fontSize: '2.5rem', fontWeight: 800, color: '#1A1A1A', letterSpacing: '-0.03em', display: 'flex', alignItems: 'center', gap: '10px' }}>
             <FileText size={32} color="#DBA030" /> Transactions
           </h1>
-          <button onClick={downloadCSV} style={{ background: '#1A1A1A', color: '#FFF', border: 'none', padding: '0.8rem 1.5rem', borderRadius: '12px', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Download size={16} /> Export CSV
-          </button>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <button onClick={downloadPDF} style={{ background: '#DBA030', color: '#FFF', border: 'none', padding: '0.8rem 1.5rem', borderRadius: '12px', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <FileDown size={16} /> Download PDF
+            </button>
+            <button onClick={downloadCSV} style={{ background: '#1A1A1A', color: '#FFF', border: 'none', padding: '0.8rem 1.5rem', borderRadius: '12px', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Download size={16} /> Export CSV
+            </button>
+          </div>
         </div>
 
         <div style={{ background: '#FFF', padding: '1rem', borderRadius: '16px', border: '1px solid rgba(0,0,0,0.05)', display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
