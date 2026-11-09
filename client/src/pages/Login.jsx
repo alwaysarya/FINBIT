@@ -171,7 +171,7 @@ const Login = () => {
         </div>
         <div className="bank-header-right">
           
-          <Link to="/register" style={{ background: "#F9D989", padding: "0.7rem 1.5rem", borderRadius: "12px", fontWeight: 700, textDecoration: "none", color: "#1A1A1A" }}>Request Demo</Link>
+          
         </div>
       </div>
 
