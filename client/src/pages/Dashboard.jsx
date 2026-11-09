@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, useMemo } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import api from '../services/api';
@@ -19,6 +19,7 @@ const Dashboard = () => {
   const [recentTxns, setRecentTxns] = useState([]);
   const [stats, setStats] = useState({ income: 0, expense: 0 });
   const [activeTab, setActiveTab] = useState('Banking');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const pieData = [
     { name: 'Food', value: 4000 },
@@ -57,30 +58,12 @@ const Dashboard = () => {
   return (
     <div style={{ minHeight: '100vh', background: '#FCF9F2', paddingBottom: '4rem', position: 'relative' }}>
       
-      {/* TOP BAR */}
-      <div style={{ background: '#FFF', padding: '1rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <div style={{ width: '48px', height: '48px', background: 'linear-gradient(135deg, #F9D989 0%, #E2B657 100%)', border: 'none', borderRadius: '50%', boxShadow: '0 4px 15px rgba(219,160,48,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', color: '#DBA030' }}>
-            <User size={24} />
-          </div>
-          <div>
-            <h2 style={{ fontSize: '1.3rem', fontWeight: 800, letterSpacing: '-0.02em' }}>Hello {user.name.split(' ')[0]},</h2>
-            <p style={{ fontSize: '0.85rem', color: '#888' }}>Let's get started!</p>
-          </div>
-        </div>
-        <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
-          <Search size={20} color="#666" style={{ cursor: 'pointer' }} onClick={() => navigate('/transactions')} />
-          <Bell size={20} color="#666" style={{ cursor: 'pointer' }} onClick={() => navigate('/notifications')} />
-          <LogOut size={20} color="#666" style={{ cursor: 'pointer' }} onClick={() => { logout(); navigate('/login'); }} />
-        </div>
-      </div>
-
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem' }}>
         
         {/* TABS */}
-        <div style={{ display: 'flex', gap: '2rem', borderBottom: '1px solid rgba(0,0,0,0.05)', marginBottom: '2.5rem' }}>
+        <div style={{ display: 'flex', gap: '2rem', borderBottom: '1px solid rgba(0,0,0,0.05)', marginBottom: '2rem' }}>
           {['Banking', 'Lifestyle', 'Rewards'].map(tab => (
-            <div key={tab} onClick={() => setActiveTab(tab)} style={{ paddingBottom: '1rem', cursor: 'pointer', borderBottom: activeTab === tab ? '3px solid #DBA030' : 'none', color: activeTab === tab ? '#1A1A1A' : '#888', fontWeight: activeTab === tab ? 700 : 500 }}>
+            <div key={tab} onClick={() => setActiveTab(tab)} style={{ paddingBottom: '1rem', cursor: 'pointer', borderBottom: activeTab === tab ? '3px solid #DBA030' : '3px solid transparent', color: activeTab === tab ? '#1A1A1A' : '#888', fontWeight: activeTab === tab ? 700 : 500 }}>
               {tab}
             </div>
           ))}
@@ -131,14 +114,14 @@ const Dashboard = () => {
 
         {/* PAYMENTS & TRANSFERS */}
         <div style={{ marginBottom: '3rem' }}>
-          <h3 style={{ fontSize: '1.3rem', fontWeight: 800, letterSpacing: '-0.02em', marginBottom: '1.5rem' }}>Payments & Transfers</h3>
+          <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '1.5rem' }}>Payments & Transfers</h3>
           <div style={{ display: 'flex', gap: '2rem', marginBottom: '1.5rem', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
             {['UPI', 'Fund Transfer', 'Bills', 'Yono Cash'].map((tab, i) => (
                <p key={tab} style={{ paddingBottom: '0.8rem', color: i === 0 ? '#1A1A1A' : '#888', fontWeight: i === 0 ? 700 : 500, borderBottom: i === 0 ? '2px solid #DBA030' : 'none', fontSize: '0.95rem' }}>{tab}</p>
             ))}
           </div>
 
-          <div style={{ background: '#FFF', border: '1px solid rgba(0,0,0,0.05)', borderRadius: '12px', padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
+          <div style={{ background: '#FFF', border: '1px solid rgba(0,0,0,0.05)', borderRadius: '12px', padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={{ background: '#FEF2F2', padding: '6px', borderRadius: '50%' }}><div style={{ width: '8px', height: '8px', background: '#EF4444', borderRadius: '50%' }}></div></div>
               <p style={{ color: '#555', fontSize: '0.9rem' }}>You haven't created a UPI ID.</p>
@@ -146,21 +129,21 @@ const Dashboard = () => {
             <p style={{ color: '#1A1A1A', fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer' }}>Activate UPI ID</p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2rem', textAlign: 'center' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', textAlign: 'center' }}>
             <div style={{ cursor: 'pointer' }} onClick={() => navigate('/transfer')}>
-              <div style={{ background: '#FFF', width: '70px', height: '70px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 0.8rem', boxShadow: '0 4px 15px rgba(0,0,0,0.03)', border: '1px solid rgba(0,0,0,0.05)' }}><Smartphone size={24} color="#DBA030" /></div>
+              <div style={{ background: '#FFF', width: '65px', height: '65px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 0.8rem', boxShadow: '0 4px 15px rgba(0,0,0,0.03)', border: '1px solid rgba(0,0,0,0.05)' }}><Smartphone size={28} color="#DBA030" /></div>
               <p style={{ fontSize: '0.85rem', fontWeight: 600, color: '#555' }}>Pay to mobile or contact</p>
             </div>
             <div style={{ cursor: 'pointer' }} onClick={() => navigate('/transfer')}>
-              <div style={{ background: '#FFF', width: '70px', height: '70px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 0.8rem', boxShadow: '0 4px 15px rgba(0,0,0,0.03)', border: '1px solid rgba(0,0,0,0.05)' }}><FileText size={24} color="#DBA030" /></div>
+              <div style={{ background: '#FFF', width: '65px', height: '65px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 0.8rem', boxShadow: '0 4px 15px rgba(0,0,0,0.03)', border: '1px solid rgba(0,0,0,0.05)' }}><FileText size={28} color="#DBA030" /></div>
               <p style={{ fontSize: '0.85rem', fontWeight: 600, color: '#555' }}>Pay UPI ID or Number</p>
             </div>
             <div style={{ cursor: 'pointer' }} onClick={() => navigate('/transfer')}>
-              <div style={{ background: '#FFF', width: '70px', height: '70px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 0.8rem', boxShadow: '0 4px 15px rgba(0,0,0,0.03)', border: '1px solid rgba(0,0,0,0.05)' }}><Landmark size={24} color="#DBA030" /></div>
+              <div style={{ background: '#FFF', width: '65px', height: '65px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 0.8rem', boxShadow: '0 4px 15px rgba(0,0,0,0.03)', border: '1px solid rgba(0,0,0,0.05)' }}><Landmark size={28} color="#DBA030" /></div>
               <p style={{ fontSize: '0.85rem', fontWeight: 600, color: '#555' }}>Pay to Bank A/C</p>
             </div>
             <div style={{ cursor: 'pointer' }} onClick={() => navigate('/transactions')}>
-              <div style={{ background: '#FFF', width: '70px', height: '70px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 0.8rem', boxShadow: '0 4px 15px rgba(0,0,0,0.03)', border: '1px solid rgba(0,0,0,0.05)' }}><ArrowUpRight size={24} color="#DBA030" /></div>
+              <div style={{ background: '#FFF', width: '65px', height: '65px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 0.8rem', boxShadow: '0 4px 15px rgba(0,0,0,0.03)', border: '1px solid rgba(0,0,0,0.05)' }}><ArrowUpRight size={28} color="#DBA030" /></div>
               <p style={{ fontSize: '0.85rem', fontWeight: 600, color: '#555' }}>View Transactions</p>
             </div>
           </div>
@@ -178,7 +161,7 @@ const Dashboard = () => {
         {/* CHARTS */}
         <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
           <div style={{ background: '#FFF', padding: '2rem', borderRadius: '24px', border: '1px solid rgba(0,0,0,0.05)' }}>
-            <h3 style={{ fontSize: '1.3rem', fontWeight: 800, letterSpacing: '-0.02em', marginBottom: '1.5rem' }}>Cash Flow Analytics</h3>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '1.5rem' }}>Cash Flow Analytics</h3>
             <div style={{ height: '300px' }}>
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={chartData}>
@@ -192,7 +175,7 @@ const Dashboard = () => {
             </div>
           </div>
           <div style={{ background: '#FFF', padding: '2rem', borderRadius: '24px', border: '1px solid rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column' }}>
-            <h3 style={{ fontSize: '1.3rem', fontWeight: 800, letterSpacing: '-0.02em', marginBottom: '1rem' }}>Spending Categories</h3>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '1rem' }}>Spending Categories</h3>
             <div style={{ flex: 1, minHeight: '200px' }}>
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
@@ -214,7 +197,7 @@ const Dashboard = () => {
         </div>
 
         {/* BOTTOM SERVICES GRID */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '2rem', textAlign: 'center', marginBottom: '2.5rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '1.5rem', textAlign: 'center', marginBottom: '2rem' }}>
            {[
              { icon: PiggyBank, label: 'Deposits', path: '/fd' },
              { icon: Briefcase, label: 'Loans', path: '/loans' },

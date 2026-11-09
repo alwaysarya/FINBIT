@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import api from '../services/api';
+import './Navbar.css';
 import { Landmark, Bell, LogOut } from 'lucide-react';
 
 const Navbar = () => {

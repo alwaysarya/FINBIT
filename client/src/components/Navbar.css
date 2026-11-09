@@ -1,0 +1,11 @@
+.navbar {
+  background: #F2C879 !important;
+  border-bottom: 1px solid rgba(0,0,0,0.05) !important;
+}
+.navbar .logo { color: #1A1A1A !important; }
+.navbar .logo svg { color: #1A1A1A !important; }
+.navbar .nav-links a { color: #1A1A1A !important; font-weight: 600; }
+.navbar .nav-links a:hover { color: #FFF !important; }
+.navbar .welcome { color: #332A1D !important; font-weight: 600; }
+.navbar .logout-btn { color: #1A1A1A !important; border-color: #1A1A1A !important; background: transparent !important; }
+.navbar .logout-btn:hover { background: #1A1A1A !important; color: #F2C879 !important; }
