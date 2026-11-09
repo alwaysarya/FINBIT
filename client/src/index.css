@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
   --bg-base: #0A0A0A;
@@ -7,7 +7,7 @@
   --border-color: #2A2A2A;
   --text-primary: #FFFFFF;
   --text-secondary: #A1A1AA;
-  --accent-primary: #4F46E5; /* Indigo (Stripe style) */
+  --accent-primary: #4F46E5;
   --accent-hover: #4338CA;
   --success: #10B981;
   --danger: #EF4444;
@@ -15,44 +15,23 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
 
-body {
-  background-color: var(--bg-base);
-  color: var(--text-primary);
-  min-height: 100vh;
-}
+body { background-color: var(--bg-base); color: var(--text-primary); min-height: 100vh; overflow-x: hidden; }
 
 /* Navbar */
-.navbar {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 1rem 2rem;
-  background: var(--bg-base);
-  border-bottom: 1px solid var(--border-color);
-  position: sticky; top: 0; z-index: 1000;
-}
+.navbar { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background: var(--bg-base); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; }
 .logo { color: var(--text-primary); font-weight: 700; font-size: 1.2rem; text-decoration: none; letter-spacing: -0.02em; display: flex; align-items: center; gap: 8px; }
 .nav-links { display: flex; gap: 1.5rem; align-items: center; }
 .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s ease; display: flex; align-items: center; gap: 6px; }
 .nav-links a:hover { color: var(--text-primary); }
 
 /* Buttons */
-button, .edit-btn {
-  background: var(--accent-primary); color: white; border: none;
-  padding: 0.6rem 1.2rem; border-radius: 8px;
-  cursor: pointer; font-weight: 500; font-size: 0.9rem;
-  transition: background 0.2s ease;
-  display: inline-flex; align-items: center; gap: 8px; justify-content: center;
-}
+button, .edit-btn { background: var(--accent-primary); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; font-weight: 500; font-size: 0.9rem; transition: background 0.2s ease; display: inline-flex; align-items: center; gap: 8px; justify-content: center; }
 button:hover { background: var(--accent-hover); }
 .logout-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-primary); }
 .logout-btn:hover { background: var(--bg-surface); }
 
 /* Inputs */
-input, select, textarea {
-  width: 100%; padding: 0.75rem 1rem;
-  background: var(--bg-surface); border: 1px solid var(--border-color);
-  border-radius: 8px; color: var(--text-primary); font-size: 0.95rem;
-  transition: border-color 0.2s ease; outline: none;
-}
+input, select, textarea { width: 100%; padding: 0.75rem 1rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-size: 0.95rem; transition: border-color 0.2s ease; outline: none; }
 input:focus, select:focus, textarea:focus { border-color: var(--accent-primary); }
 
 /* Layout */
@@ -61,26 +40,224 @@ h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 
 h2 { font-size: 1.4rem; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 1rem; }
 h3 { font-size: 1rem; font-weight: 500; color: var(--text-secondary); margin-bottom: 1rem; }
 
-/* Auth Box */
-.auth-container { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
-.auth-box {
-  background: var(--bg-surface); padding: 3rem; border-radius: 16px;
-  width: 100%; max-width: 400px; border: 1px solid var(--border-color);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-.auth-box h1 { font-size: 1.8rem; text-align: center; margin-bottom: 0.5rem; display: flex; justify-content: center; align-items: center; gap: 10px; }
-.auth-box h2 { text-align: center; color: var(--text-secondary); font-size: 0.95rem; font-weight: 400; margin-bottom: 2rem; }
-.auth-box form { display: flex; flex-direction: column; gap: 1rem; }
-.auth-box p { text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-secondary); }
-.auth-box a { color: var(--accent-primary); text-decoration: none; font-weight: 500; }
-.auth-box a:hover { text-decoration: underline; }
+/* ========================================= */
+/* DEEP PREMIUM BANKING LOGIN STYLES         */
+/* ========================================= */
 
-/* Cards */
-.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
-.card {
-  background: var(--bg-surface); padding: 1.5rem; border-radius: 12px;
-  border: 1px solid var(--border-color); transition: transform 0.2s ease, border-color 0.2s ease;
+.bank-auth-wrapper {
+  min-height: 100vh;
+  background: radial-gradient(circle at 10% 20%, #FCF9F2 0%, #F5F0E6 100%);
+  color: #1A1A1A;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
+
+/* Background Abstract Banking Visuals */
+.bank-bg-visual {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  backdrop-filter: blur(10px);
+}
+
+/* 3D Gold Card */
+.floating-card-1 {
+  top: 15%;
+  left: 10%;
+  width: 340px;
+  height: 210px;
+  background: linear-gradient(135deg, #F9D989 0%, #E2B657 100%);
+  border-radius: 24px;
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.15),
+    inset 0 2px 5px rgba(255, 255, 255, 0.5),
+    inset 0 -2px 5px rgba(0, 0, 0, 0.05);
+  transform: rotate(-12deg);
+  border: 1px solid rgba(255,255,255,0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2rem;
+  color: #332A1D;
+}
+
+/* UPI QR Card */
+.floating-card-2 {
+  bottom: 10%;
+  right: 10%;
+  width: 260px;
+  height: 260px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 32px;
+  box-shadow: 
+    0 30px 60px -15px rgba(0,0,0,0.1),
+    0 0 0 1px rgba(0,0,0,0.03);
+  transform: rotate(10deg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* Floating Coin */
+.floating-coin {
+  width: 90px;
+  height: 90px;
+  background: linear-gradient(135deg, #F9D989 0%, #DBA030 100%);
+  border-radius: 50%;
+  position: absolute;
+  box-shadow: 
+    0 15px 30px -5px rgba(219, 160, 48, 0.4),
+    inset 0 2px 10px rgba(255,255,255,0.6),
+    inset 0 -3px 10px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #5A4315;
+  font-weight: 800;
+  font-size: 2.5rem;
+}
+.coin-1 { top: 25%; right: 20%; }
+.coin-2 { bottom: 20%; left: 20%; background: linear-gradient(135deg, #6A85FF 0%, #4338CA 100%); box-shadow: 0 15px 30px -5px rgba(106, 133, 255, 0.4), inset 0 2px 10px rgba(255,255,255,0.2); color: white; }
+
+/* Header */
+.bank-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2.5rem 4rem;
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  z-index: 10;
+}
+
+.bank-logo {
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: #000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bank-header-right {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.bank-header-right a {
+  color: #000;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* Center Login Card - Ultra Premium */
+.bank-center {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+  padding: 2rem;
+}
+
+.bank-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  padding: 3.5rem;
+  border-radius: 32px;
+  width: 100%;
+  max-width: 460px;
+  box-shadow: 
+    0 40px 80px -20px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(0,0,0,0.02);
+  text-align: center;
+  position: relative;
+  border-top: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.bank-card h2 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #000;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.04em;
+}
+
+.bank-card p.subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 2.5rem;
+  font-weight: 400;
+}
+
+.bank-input-group {
+  position: relative;
+  margin-bottom: 1.2rem;
+  text-align: left;
+}
+
+.bank-input-group input {
+  width: 100%;
+  padding: 1.1rem 1.2rem 1.1rem 3rem;
+  border: 1.5px solid #E5E5E5;
+  border-radius: 16px;
+  font-size: 1rem;
+  color: #000;
+  background: #F9F9F9;
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  font-weight: 500;
+}
+.bank-input-group input:focus { 
+  border-color: #F2C879; 
+  background: #FFF; 
+  box-shadow: 0 0 0 4px rgba(242, 200, 121, 0.15); 
+}
+.bank-input-group input::placeholder { color: #999; font-weight: 400; }
+
+.bank-submit {
+  width: 100%;
+  background: #F2C879;
+  color: #000;
+  padding: 1.1rem;
+  border-radius: 16px;
+  border: none;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-top: 1rem;
+  box-shadow: 0 4px 14px rgba(242, 200, 121, 0.3);
+}
+.bank-submit:hover { background: #e6b96b; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(242, 200, 121, 0.4); }
+.bank-submit:active { transform: translateY(0); }
+
+.bank-copyright {
+  text-align: center;
+  padding: 2rem;
+  color: #999;
+  font-size: 0.9rem;
+  z-index: 10;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .bank-header { padding: 1.5rem 2rem; }
+  .bank-header-right a { display: none; }
+  .bank-bg-visual { display: none; }
+}
+
+/* Cards (Dashboard) */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+.card { background: var(--bg-surface); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-color); transition: transform 0.2s ease, border-color 0.2s ease; }
 .card:hover { border-color: #3A3A3A; transform: translateY(-2px); }
 .card-title { color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px; }
 .card-value { font-size: 2.2rem; font-weight: 700; letter-spacing: -0.02em; color: var(--text-primary); }
@@ -91,7 +268,7 @@ h3 { font-size: 1rem; font-weight: 500; color: var(--text-secondary); margin-bot
 .quick-actions button { background: var(--bg-surface); border: 1px solid var(--border-color); color: var(--text-primary); }
 .quick-actions button:hover { background: var(--bg-elevated); }
 
-/* Tables & Lists */
+/* Lists & Tables */
 .txn-list { display: flex; flex-direction: column; border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; background: var(--bg-surface); }
 .txn-item { display: flex; align-items: center; gap: 1.2rem; padding: 1.2rem; border-bottom: 1px solid var(--border-color); transition: background 0.2s ease; cursor: pointer; }
 .txn-item:last-child { border-bottom: none; }
@@ -123,13 +300,7 @@ h3 { font-size: 1rem; font-weight: 500; color: var(--text-secondary); margin-bot
 .toast-error { background: var(--danger); }
 
 /* Virtual Card */
-.virtual-card {
-  width: 100%; max-width: 380px; aspect-ratio: 1.6;
-  background: linear-gradient(135deg, #27272A 0%, #111111 100%);
-  border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between;
-  color: white; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4); border: 1px solid #333;
-  position: relative; overflow: hidden;
-}
+.virtual-card { width: 100%; max-width: 380px; aspect-ratio: 1.6; background: linear-gradient(135deg, #27272A 0%, #111111 100%); border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; color: white; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4); border: 1px solid #333; position: relative; overflow: hidden; }
 .card-number { font-size: 1.4rem; letter-spacing: 2px; font-family: monospace; }
 .card-bottom { display: flex; justify-content: space-between; }
 .card-label { font-size: 0.6rem; color: var(--text-secondary); text-transform: uppercase; }

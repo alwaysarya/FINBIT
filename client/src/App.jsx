@@ -1,8 +1,8 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import { useContext } from 'react';
 import Navbar from './components/Navbar';
-import Landing from './pages/Landing'; // <-- Naya Import
+import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
@@ -35,54 +35,55 @@ const Protected = ({ children }) => {
   return user ? children : <Navigate to="/login" />;
 };
 
+const AppRoutes = () => {
+  const location = useLocation();
+  
+  // In pages pe Navbar nahi dikhega
+  const hideNavbarRoutes = ['/', '/login', '/register', '/forgot-password'];
+  const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname);
+
+  return (
+    <>
+      {!shouldHideNavbar && <Navbar />}
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/dashboard" element={<Protected><Dashboard /></Protected>} />
+        <Route path="/deposit" element={<Protected><Deposit /></Protected>} />
+        <Route path="/transfer" element={<Protected><Transfer /></Protected>} />
+        <Route path="/transactions" element={<Protected><Transactions /></Protected>} />
+        <Route path="/profile" element={<Protected><Profile /></Protected>} />
+        <Route path="/bills" element={<Protected><Bills /></Protected>} />
+        <Route path="/fd" element={<Protected><FixedDeposit /></Protected>} />
+        <Route path="/rd" element={<Protected><RecurringDeposit /></Protected>} />
+        <Route path="/beneficiaries" element={<Protected><Beneficiaries /></Protected>} />
+        <Route path="/goals" element={<Protected><Goals /></Protected>} />
+        <Route path="/card" element={<Protected><MyCard /></Protected>} />
+        <Route path="/rewards" element={<Protected><Rewards /></Protected>} />
+        <Route path="/requests" element={<Protected><Requests /></Protected>} />
+        <Route path="/scheduled" element={<Protected><ScheduledTransfers /></Protected>} />
+        <Route path="/ledger" element={<Protected><Ledger /></Protected>} />
+        <Route path="/recurring" element={<Protected><Recurring /></Protected>} />
+        <Route path="/loans" element={<Protected><Loans /></Protected>} />
+        <Route path="/notifications" element={<Protected><Notifications /></Protected>} />
+        <Route path="/support" element={<Protected><Support /></Protected>} />
+        <Route path="/settings" element={<Protected><Settings /></Protected>} />
+        <Route path="/refer" element={<Protected><ReferEarn /></Protected>} />
+        <Route path="/budget" element={<Protected><Budget /></Protected>} />
+      </Routes>
+    </>
+  );
+};
+
 const App = () => {
   return (
     <AuthProvider>
       <BrowserRouter>
-        {/* Navbar hamesha dikhega, par Landing page pe Navbar nahi hoga isliye hum check lagayenge */}
-        <LayoutWrapper>
-          <Routes>
-            <Route path="/" element={<Landing />} /> {/* <-- Ab root pe Landing khulega */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/dashboard" element={<Protected><Dashboard /></Protected>} />
-            <Route path="/deposit" element={<Protected><Deposit /></Protected>} />
-            <Route path="/transfer" element={<Protected><Transfer /></Protected>} />
-            <Route path="/transactions" element={<Protected><Transactions /></Protected>} />
-            <Route path="/profile" element={<Protected><Profile /></Protected>} />
-            <Route path="/bills" element={<Protected><Bills /></Protected>} />
-            <Route path="/fd" element={<Protected><FixedDeposit /></Protected>} />
-            <Route path="/rd" element={<Protected><RecurringDeposit /></Protected>} />
-            <Route path="/beneficiaries" element={<Protected><Beneficiaries /></Protected>} />
-            <Route path="/goals" element={<Protected><Goals /></Protected>} />
-            <Route path="/card" element={<Protected><MyCard /></Protected>} />
-            <Route path="/rewards" element={<Protected><Rewards /></Protected>} />
-            <Route path="/requests" element={<Protected><Requests /></Protected>} />
-            <Route path="/scheduled" element={<Protected><ScheduledTransfers /></Protected>} />
-            <Route path="/ledger" element={<Protected><Ledger /></Protected>} />
-            <Route path="/recurring" element={<Protected><Recurring /></Protected>} />
-            <Route path="/loans" element={<Protected><Loans /></Protected>} />
-            <Route path="/notifications" element={<Protected><Notifications /></Protected>} />
-            <Route path="/support" element={<Protected><Support /></Protected>} />
-            <Route path="/settings" element={<Protected><Settings /></Protected>} />
-            <Route path="/refer" element={<Protected><ReferEarn /></Protected>} />
-            <Route path="/budget" element={<Protected><Budget /></Protected>} />
-          </Routes>
-        </LayoutWrapper>
+        <AppRoutes />
       </BrowserRouter>
     </AuthProvider>
-  );
-};
-
-// Ye component check karega ki Navbar dikhana hai ya nahi
-const LayoutWrapper = ({ children }) => {
-  const isLandingPage = window.location.pathname === '/';
-  return (
-    <>
-      {!isLandingPage && <Navbar />}
-      {children}
-    </>
   );
 };
 
