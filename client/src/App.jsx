@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
 import Dashboard from './pages/Dashboard';
+import CreditCardApply from './pages/CreditCardApply';
 import Transfer from './pages/Transfer';
 import Transactions from './pages/Transactions';
 import Deposit from './pages/Deposit';
@@ -51,6 +52,7 @@ const AppRoutes = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/dashboard" element={<Protected><Dashboard /></Protected>} />
+          <Route path="/apply-card" element={<Protected><CreditCardApply /></Protected>} />
         <Route path="/deposit" element={<Protected><Deposit /></Protected>} />
         <Route path="/transfer" element={<Protected><Transfer /></Protected>} />
         <Route path="/transactions" element={<Protected><Transactions /></Protected>} />

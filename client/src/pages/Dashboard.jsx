@@ -104,7 +104,7 @@ const Dashboard = () => {
         </div>
 
         {/* CREDIT CARD BANNER */}
-        <div style={{ background: '#FFF', border: '1px solid rgba(0,0,0,0.05)', borderRadius: '16px', padding: '1.2rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
+        <div onClick={() => navigate('/apply-card')} style={{ background: '#FFF', border: '1px solid rgba(0,0,0,0.05)', borderRadius: '16px', padding: '1.2rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem', cursor: 'pointer' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <div style={{ background: '#FCF9F2', padding: '10px', borderRadius: '50%' }}><Bell size={18} color="#DBA030" /></div>
             <p style={{ color: '#555', fontSize: '0.95rem' }}>You are just a few taps away from your CREDIT CARD. Apply Now!</p>
@@ -150,7 +150,7 @@ const Dashboard = () => {
         </div>
 
         {/* PERSONAL FINANCE BANNER */}
-        <div style={{ background: 'linear-gradient(135deg, #1A1A1A 0%, #333 100%)', borderRadius: '24px', padding: '3rem', color: '#FFF', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
+        <div onClick={() => navigate('/budget')} style={{ background: 'linear-gradient(135deg, #1A1A1A 0%, #333 100%)', borderRadius: '24px', padding: '3rem', color: '#FFF', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem', cursor: 'pointer' }}>
           <div>
             <h3 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.5rem' }}>Personal Finance Manager</h3>
             <p style={{ color: '#A1A1AA', fontSize: '0.95rem' }}>One dashboard, all your finances, start using Personal Finance Manager now!</p>
