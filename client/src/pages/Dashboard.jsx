@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import api from '../services/api';
@@ -40,10 +40,14 @@ const Dashboard = () => {
         });
         setStats({ income, expense });
         
-        setChartData([
-          { name: 'Mon', amount: 4000 }, { name: 'Tue', amount: 3000 }, { name: 'Wed', amount: 5000 }, 
-          { name: 'Thu', amount: 2780 }, { name: 'Fri', amount: 1890 }, { name: 'Sat', amount: 2390 }, { name: 'Sun', amount: 3490 },
-        ]);
+        const dailyMap = {};
+        txns.forEach(t => {
+          const day = new Date(t.createdAt).toLocaleDateString('en-US', { weekday: 'short' });
+          dailyMap[day] = (dailyMap[day] || 0) + t.amount;
+        });
+        const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        const realData = days.map(d => ({ name: d, amount: dailyMap[d] || 0 }));
+        setChartData(realData);
       }).catch(err => console.log(err));
     }
   }, [user]);
@@ -65,8 +69,8 @@ const Dashboard = () => {
           </div>
         </div>
         <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
-          <Search size={20} color="#666" style={{ cursor: 'pointer' }} />
-          <Bell size={20} color="#666" style={{ cursor: 'pointer' }} />
+          <Search size={20} color="#666" style={{ cursor: 'pointer' }} onClick={() => navigate('/transactions')} />
+          <Bell size={20} color="#666" style={{ cursor: 'pointer' }} onClick={() => navigate('/notifications')} />
           <LogOut size={20} color="#666" style={{ cursor: 'pointer' }} onClick={() => { logout(); navigate('/login'); }} />
         </div>
       </div>
