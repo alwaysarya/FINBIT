@@ -5,37 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FINBIT Admin Panel</title>
     <style>
-      body { background: #0A0A0A; color: white; font-family: 'Inter', sans-serif; margin: 0; padding: 2rem; }
-      .container { max-width: 1200px; margin: 0 auto; }
-      .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 1px solid #2A2A2A; padding-bottom: 1rem; }
-      .tabs { display: flex; gap: 1rem; margin-bottom: 2rem; }
-      .tab { background: #141414; color: #A1A1AA; border: 1px solid #2A2A2A; padding: 0.7rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 500; }
-      .tab.active { background: #4F46E5; color: white; border-color: #4F46E5; }
-      table { width: 100%; border-collapse: collapse; background: #141414; border-radius: 12px; overflow: hidden; border: 1px solid #2A2A2A; }
-      th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #2A2A2A; font-size: 0.9rem; }
-      th { background: #0A0A0A; color: #A1A1AA; font-weight: 500; }
-      .btn { padding: 0.4rem 0.8rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; font-size: 0.85rem; }
-      .btn-red { background: #EF4444; color: white; }
-      .btn-green { background: #10B981; color: white; }
-      .btn-blue { background: #4F46E5; color: white; }
-      textarea { width: 100%; padding: 0.5rem; background: #0A0A0A; border: 1px solid #2A2A2A; border-radius: 6px; color: white; margin-bottom: 0.5rem; }
-      .ticket-card { background: #141414; padding: 1.5rem; border-radius: 12px; border: 1px solid #2A2A2A; margin-bottom: 1rem; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { background: #FCF9F2; color: #1A1A1A; font-family: 'Inter', -apple-system, sans-serif; padding: 2rem; min-height: 100vh; }
+      
+      .admin-container { max-width: 1200px; margin: 0 auto; }
+      
+      .admin-header {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 1.5rem 2rem; background: #FFF; border-radius: 20px;
+        margin-bottom: 2rem; border: 1px solid rgba(0,0,0,0.05);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+      }
+      .admin-header h1 { font-size: 1.5rem; font-weight: 800; color: #1A1A1A; display: flex; align-items: center; gap: 10px; }
+      .admin-header h1::before { content: '🛡️'; font-size: 1.8rem; }
+      
+      .tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; background: #FFF; padding: 0.5rem; border-radius: 16px; border: 1px solid rgba(0,0,0,0.05); width: fit-content; }
+      .tab-btn {
+        background: transparent; color: #666; border: none; padding: 0.8rem 1.5rem;
+        border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 0.95rem;
+        transition: all 0.2s;
+      }
+      .tab-btn:hover { background: #FCF9F2; }
+      .tab-btn.active { background: #DBA030; color: #FFF; }
+      
+      .content-area { background: #FFF; border-radius: 20px; padding: 2rem; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
+      
+      table { width: 100%; border-collapse: collapse; }
+      th { text-align: left; padding: 1rem; color: #888; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; border-bottom: 2px solid #F0F0F0; }
+      td { padding: 1rem; border-bottom: 1px solid #F0F0F0; font-size: 0.95rem; color: #1A1A1A; }
+      tr:hover { background: #FCF9F2; }
+      
+      .btn { padding: 0.5rem 1rem; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.85rem; transition: all 0.2s; }
+      .btn-red { background: #EF4444; color: #FFF; }
+      .btn-green { background: #10B981; color: #FFF; }
+      .btn-gold { background: #DBA030; color: #FFF; }
+      .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+      
+      .ticket-card { background: #FCF9F2; padding: 1.5rem; border-radius: 16px; margin-bottom: 1rem; border-left: 4px solid #DBA030; }
+      .ticket-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+      .ticket-card p { color: #666; font-size: 0.9rem; margin-bottom: 1rem; }
+      .ticket-card .meta { color: #888; font-size: 0.8rem; margin-bottom: 1rem; }
+      
+      textarea { width: 100%; padding: 0.8rem; border-radius: 10px; border: 1px solid #E5E5E5; background: #FFF; font-family: inherit; font-size: 0.9rem; margin-bottom: 0.8rem; resize: vertical; }
+      textarea:focus { outline: none; border-color: #DBA030; }
+      
+      .empty { text-align: center; padding: 3rem; color: #888; font-size: 1rem; }
+      
+      .status-badge { display: inline-block; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
+      .status-active { background: #ECFDF5; color: #10B981; }
+      .status-frozen { background: #FEF2F2; color: #EF4444; }
     </style>
   </head>
   <body>
-    <div class="container">
-      <div class="header">
-        <h1>FINBIT Admin</h1>
-        <div id="admin-info">Checking...</div>
+    <div class="admin-container">
+      <div class="admin-header">
+        <h1>FINBIT Admin Panel</h1>
+        <div id="admin-info" style="color: #666; font-size: 0.9rem;">Checking...</div>
       </div>
 
       <div class="tabs" id="tabs" style="display: none;">
-        <button class="tab active" onclick="switchTab('users', event)">Users</button>
-        <button class="tab" onclick="switchTab('tickets', event)">Tickets</button>
-        <button class="tab" onclick="switchTab('loans', event)">Loans</button>
+        <button class="tab-btn active" onclick="switchTab('users', event)">👥 Users</button>
+        <button class="tab-btn" onclick="switchTab('tickets', event)">🎫 Tickets</button>
+        <button class="tab-btn" onclick="switchTab('loans', event)">💰 Loans</button>
       </div>
 
-      <div id="content"></div>
+      <div class="content-area" id="content">
+        <div class="empty">Loading...</div>
+      </div>
     </div>
     <script type="module" src="./admin.js"></script>
   </body>

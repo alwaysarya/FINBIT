@@ -1,20 +1,20 @@
 const API = 'http://localhost:5001/api';
 const userStr = localStorage.getItem('finbit_user');
 const user = userStr ? JSON.parse(userStr) : null;
+const headers = { Authorization: `Bearer ${user?.token}`, 'Content-Type': 'application/json' };
 
 if (!user || user.role !== 'admin') {
-  document.getElementById('admin-info').innerHTML = `Not an admin. <a href="/" style="color:#4F46E5">Go to Login</a>`;
-  document.getElementById('content').innerHTML = `<p style="padding:2rem; background:#141414; border-radius:12px; border:1px solid #2A2A2A;">Access Denied. Only Admin can access this page.</p>`;
+  document.getElementById('admin-info').innerHTML = `Not an admin. <a href="/" style="color: #DBA030">Go to Login</a>`;
+  document.getElementById('content').innerHTML = `<div class="empty">Access Denied. Only Admin can access this page.</div>`;
 } else {
-  document.getElementById('admin-info').innerHTML = `Welcome, ${user.name}`;
+  document.getElementById('admin-info').innerHTML = `Welcome, <strong>${user.name}</strong>`;
   document.getElementById('tabs').style.display = 'flex';
   loadTab('users');
 }
 
-const headers = { Authorization: `Bearer ${user?.token}`, 'Content-Type': 'application/json' };
 
 window.switchTab = (tab, event) => {
-  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   event.target.classList.add('active');
   loadTab(tab);
 };
@@ -30,14 +30,22 @@ async function fetchUsers() {
   const data = await res.json();
   const content = document.getElementById('content');
 
+  if (data.length === 0) {
+    content.innerHTML = '<div class="empty">No users found.</div>';
+    return;
+  }
+
   content.innerHTML = `
     <table>
       <thead><tr><th>Name</th><th>Email</th><th>A/C No.</th><th>Balance</th><th>Status</th><th>Action</th></tr></thead>
       <tbody>${data.map(u => {
         const acc = u.account || {};
         return `<tr>
-          <td>${u.name}</td><td>${u.email}</td><td>${acc.accountNumber || '-'}</td><td>₹${acc.balance || 0}</td>
-          <td>${acc.isFrozen ? 'Frozen' : 'Active'}</td>
+          <td><strong>${u.name}</strong></td>
+          <td>${u.email}</td>
+          <td>${acc.accountNumber || '-'}</td>
+          <td>₹${acc.balance?.toLocaleString() || 0}</td>
+          <td><span class="status-badge ${acc.isFrozen ? 'status-frozen' : 'status-active'}">${acc.isFrozen ? 'Frozen' : 'Active'}</span></td>
           <td>${acc._id ? `<button class="btn ${acc.isFrozen ? 'btn-green' : 'btn-red'}" onclick="toggleFreeze('${acc._id}')">${acc.isFrozen ? 'Unfreeze' : 'Freeze'}</button>` : '-'}</td>
         </tr>`;
       }).join('')}</tbody>
@@ -49,15 +57,21 @@ async function fetchTickets() {
   const data = await res.json();
   const content = document.getElementById('content');
 
-  content.innerHTML = data.length === 0 ? '<p>No tickets.</p>' : data.map(t => `
+  if (data.length === 0) {
+    content.innerHTML = '<div class="empty">No support tickets yet.</div>';
+    return;
+  }
+
+  content.innerHTML = data.map(t => `
     <div class="ticket-card">
-      <h3>${t.subject} <span style="font-size:0.8rem; color:#A1A1AA;">by ${t.user?.name}</span></h3>
-      <p style="color:#A1A1AA; margin-bottom:1rem;">${t.description}</p>
-      <p style="font-size:0.8rem; color:#A1A1AA; margin-bottom:1rem;">Status: ${t.status.toUpperCase()} | ${new Date(t.createdAt).toLocaleString()}</p>
-      ${t.adminReply ? `<div style="background:#0A0A0A; padding:1rem; border-radius:8px; margin-bottom:1rem;"><strong>Admin Reply:</strong> ${t.adminReply}</div>` : ''}
+      <h3>${t.subject}</h3>
+      <p class="meta">By ${t.user?.name} • ${new Date(t.createdAt).toLocaleString()}</p>
+      <p>${t.description}</p>
+      <p class="meta">Status: <span class="status-badge ${t.status === 'open' ? 'status-frozen' : 'status-active'}">${t.status.toUpperCase()}</span></p>
+      ${t.adminReply ? `<div style="background: #FFF; padding: 1rem; border-radius: 10px; margin-top: 1rem;"><strong style="color: #DBA030;">Admin Reply:</strong> ${t.adminReply}</div>` : ''}
       ${t.status === 'open' ? `
-        <textarea id="reply-${t._id}" placeholder="Reply..." rows="2"></textarea>
-        <button class="btn btn-blue" onclick="replyTicket('${t._id}')">Send Reply</button>
+        <textarea id="reply-${t._id}" placeholder="Type your reply..." rows="2"></textarea>
+        <button class="btn btn-gold" onclick="replyTicket('${t._id}')">Send Reply & Resolve</button>
       ` : ''}
     </div>
   `).join('');
@@ -68,11 +82,21 @@ async function fetchLoans() {
   const data = await res.json();
   const content = document.getElementById('content');
 
+  if (data.length === 0) {
+    content.innerHTML = '<div class="empty">No loans found.</div>';
+    return;
+  }
+
   content.innerHTML = `
     <table>
       <thead><tr><th>User</th><th>Type</th><th>Amount</th><th>EMI</th><th>Tenure</th><th>Status</th></tr></thead>
       <tbody>${data.map(l => `<tr>
-        <td>${l.user?.name}</td><td style="text-transform:capitalize;">${l.loanType}</td><td>₹${l.amount}</td><td>₹${l.emi}</td><td>${l.tenureMonths} mo</td><td>${l.status.toUpperCase()}</td>
+        <td><strong>${l.user?.name}</strong></td>
+        <td style="text-transform:capitalize;">${l.loanType}</td>
+        <td>₹${l.amount?.toLocaleString()}</td>
+        <td>₹${l.emi?.toLocaleString()}</td>
+        <td>${l.tenureMonths} months</td>
+        <td><span class="status-badge status-active">${l.status.toUpperCase()}</span></td>
       </tr>`).join('')}</tbody>
     </table>`;
 }
