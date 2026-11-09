@@ -121,7 +121,7 @@ const Dashboard = () => {
             ))}
           </div>
 
-          <div style={{ background: '#FFF', border: '1px solid rgba(0,0,0,0.05)', borderRadius: '12px', padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+          <div onClick={() => navigate('/upi-setup')} style={{ background: '#FFF', border: '1px solid rgba(0,0,0,0.05)', borderRadius: '12px', padding: '1rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', cursor: 'pointer' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={{ background: '#FEF2F2', padding: '6px', borderRadius: '50%' }}><div style={{ width: '8px', height: '8px', background: '#EF4444', borderRadius: '50%' }}></div></div>
               <p style={{ color: '#555', fontSize: '0.9rem' }}>You haven't created a UPI ID.</p>

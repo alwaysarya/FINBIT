@@ -8,12 +8,14 @@ const userSchema = new mongoose.Schema(
     phone: { type: String, default: '' },
     rewardPoints: { type: Number, default: 100 },
     role: { type: String, enum: ['user', 'admin'], default: 'user' },
-    // NAYA: Settings
+    upiId: { type: String, unique: true, sparse: true }, // <-- NAYA FIELD
     settings: {
       notifications: { type: Boolean, default: true },
       darkMode: { type: Boolean, default: true },
       twoFactor: { type: Boolean, default: false },
     },
+    referralCode: { type: String, unique: true, sparse: true },
+    referredBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
   },
   { timestamps: true }
 );
